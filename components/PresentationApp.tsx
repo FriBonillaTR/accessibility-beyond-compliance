@@ -1,24 +1,29 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import Reveal from "reveal.js"
+import { useEffect, useRef, useState } from "react";
+import Reveal from "reveal.js";
 
 // Import slide components
-import TitleSlide from "./slides/TitleSlide"
-import OverviewSlide from "./slides/OverviewSlide"
-import LimitsOfComplianceSlide from "./slides/LimitsOfComplianceSlide"
-import AccessibilityMeetsIdentitySlide from "./slides/AccessibilityMeetsIdentitySlide"
-import DesigningWithIntentionSlide from "./slides/DesigningWithIntentionSlide"
-import ConclusionSlide from "./slides/ConclusionSlide"
+import TitleSlide from "./slides/TitleSlide";
+import OverviewSlide from "./slides/OverviewSlide";
+import LimitsOfComplianceSlide from "./slides/LimitsOfComplianceSlide";
+import AccessibilityMeetsIdentitySlide from "./slides/AccessibilityMeetsIdentitySlide";
+import DesigningWithIntentionSlide from "./slides/DesigningWithIntentionSlide";
+import ConclusionSlide from "./slides/ConclusionSlide";
 
 export default function PresentationApp() {
-  const deckRef = useRef<HTMLDivElement>(null)
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [totalSlides, setTotalSlides] = useState(6)
-  const [isInitialized, setIsInitialized] = useState(false)
+  const deckRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [totalSlides, setTotalSlides] = useState(6);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     if (deckRef.current) {
+      const prefersReducedMotion =
+        typeof window !== "undefined"
+          ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          : false;
+
       const deck = new Reveal(deckRef.current, {
         // Accessibility configuration
         hash: true,
@@ -32,12 +37,12 @@ export default function PresentationApp() {
           40: "down", // Down arrow
           72: () => {
             // H key for help
-            announceHelp()
+            announceHelp();
           },
           27: () => {
             // Escape key to focus on current slide
-            const current = document.querySelector(".present") as HTMLElement
-            if (current) current.focus()
+            const current = document.querySelector(".present") as HTMLElement;
+            if (current) current.focus();
           },
         },
         touch: true,
@@ -45,9 +50,8 @@ export default function PresentationApp() {
         rtl: false,
         navigationMode: "default",
 
-        // Respect user motion preferences
-        transition: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "none" : "slide",
-        transitionSpeed: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : "default",
+        transition: prefersReducedMotion ? "none" : "slide",
+        transitionSpeed: prefersReducedMotion ? 0 : "default",
 
         // Controls and progress
         controls: true,
@@ -67,123 +71,140 @@ export default function PresentationApp() {
 
         // Keyboard navigation
         keyboardCondition: null, // Always allow keyboard navigation
-      })
+      });
 
       deck.initialize().then(() => {
-        setIsInitialized(true)
+        setIsInitialized(true);
 
-        const slides = deckRef.current?.querySelectorAll(".slides section")
+        const slides = deckRef.current?.querySelectorAll(".slides section");
         slides?.forEach((slide, index) => {
-          slide.setAttribute("role", "tabpanel")
-          slide.setAttribute("aria-label", `Slide ${index + 1} of ${slides.length}`)
-          slide.setAttribute("tabindex", "-1")
+          slide.setAttribute("role", "tabpanel");
+          slide.setAttribute(
+            "aria-label",
+            `Slide ${index + 1} of ${slides.length}`
+          );
+          slide.setAttribute("tabindex", "-1");
 
           // Add slide number for screen readers
-          const slideNumber = document.createElement("span")
-          slideNumber.className = "sr-only"
-          slideNumber.textContent = `Slide ${index + 1} of ${slides.length}`
-          slide.insertBefore(slideNumber, slide.firstChild)
-        })
+          const slideNumber = document.createElement("span");
+          slideNumber.className = "sr-only";
+          slideNumber.textContent = `Slide ${index + 1} of ${slides.length}`;
+          slide.insertBefore(slideNumber, slide.firstChild);
+        });
 
         deck.on("slidechanged", (event) => {
-          const slideIndex = event.indexh
-          setCurrentSlide(slideIndex)
+          const slideIndex = event.indexh;
+          setCurrentSlide(slideIndex);
 
           // Announce slide change to screen readers
-          const slideTitle = event.currentSlide.querySelector("h1, h2, h3")?.textContent || `Slide ${slideIndex + 1}`
-          announceToScreenReader(`Now viewing: ${slideTitle}`)
+          const slideTitle =
+            event.currentSlide.querySelector("h1, h2, h3")?.textContent ||
+            `Slide ${slideIndex + 1}`;
+          announceToScreenReader(`Now viewing: ${slideTitle}`);
 
           // Focus management
           setTimeout(() => {
-            const currentSlideElement = event.currentSlide as HTMLElement
+            const currentSlideElement = event.currentSlide as HTMLElement;
             if (currentSlideElement) {
-              currentSlideElement.focus()
+              currentSlideElement.focus();
             }
-          }, 100)
-        })
+          }, 100);
+        });
 
-        const skipLink = document.querySelector(".skip-link") as HTMLAnchorElement
+        const skipLink = document.querySelector(
+          ".skip-link"
+        ) as HTMLAnchorElement;
         if (skipLink) {
           skipLink.addEventListener("click", (e) => {
-            e.preventDefault()
-            const currentSlide = document.querySelector(".present") as HTMLElement
+            e.preventDefault();
+            const currentSlide = document.querySelector(
+              ".present"
+            ) as HTMLElement;
             if (currentSlide) {
-              currentSlide.focus()
-              announceToScreenReader("Skipped to main presentation content")
+              currentSlide.focus();
+              announceToScreenReader("Skipped to main presentation content");
             }
-          })
+          });
         }
 
-        const helpButton = document.querySelector(".help-button") as HTMLButtonElement
+        const helpButton = document.querySelector(
+          ".help-button"
+        ) as HTMLButtonElement;
         if (helpButton) {
-          helpButton.addEventListener("click", announceHelp)
+          helpButton.addEventListener("click", announceHelp);
         }
 
         // Initial focus and announcement
-        const firstSlide = document.querySelector(".present") as HTMLElement
+        const firstSlide = document.querySelector(".present") as HTMLElement;
         if (firstSlide) {
-          firstSlide.focus()
-          announceToScreenReader("Presentation loaded. Use arrow keys or space to navigate.")
+          firstSlide.focus();
+          announceToScreenReader(
+            "Presentation loaded. Use arrow keys or space to navigate."
+          );
         }
-      })
+      });
 
       return () => {
-        deck.destroy()
-      }
+        deck.destroy();
+      };
     }
-  }, [])
+  }, []);
 
   const announceToScreenReader = (message: string) => {
-    const announcement = document.createElement("div")
-    announcement.setAttribute("aria-live", "polite")
-    announcement.setAttribute("aria-atomic", "true")
-    announcement.className = "sr-only"
-    announcement.textContent = message
+    const announcement = document.createElement("div");
+    announcement.setAttribute("aria-live", "polite");
+    announcement.setAttribute("aria-atomic", "true");
+    announcement.className = "sr-only";
+    announcement.textContent = message;
 
-    document.body.appendChild(announcement)
+    document.body.appendChild(announcement);
 
     setTimeout(() => {
-      document.body.removeChild(announcement)
-    }, 1000)
-  }
+      document.body.removeChild(announcement);
+    }, 1000);
+  };
 
   const announceHelp = () => {
     const helpText =
-      "Keyboard navigation: Use arrow keys, space, or enter to navigate slides. Press H for help, Escape to focus current slide."
-    announceToScreenReader(helpText)
-  }
+      "Keyboard navigation: Use arrow keys, space, or enter to navigate slides. Press H for help, Escape to focus current slide.";
+    announceToScreenReader(helpText);
+  };
 
   const goToSlide = (slideIndex: number) => {
     if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck
+      const deck = (deckRef.current as any).deck;
       if (deck) {
-        deck.slide(slideIndex)
+        deck.slide(slideIndex);
       }
     }
-  }
+  };
 
   const nextSlide = () => {
     if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck
+      const deck = (deckRef.current as any).deck;
       if (deck) {
-        deck.next()
+        deck.next();
       }
     }
-  }
+  };
 
   const prevSlide = () => {
     if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck
+      const deck = (deckRef.current as any).deck;
       if (deck) {
-        deck.prev()
+        deck.prev();
       }
     }
-  }
+  };
 
   return (
     <div className="presentation-container">
       <header className="presentation-header" role="banner">
-        <nav className="presentation-nav" role="navigation" aria-label="Presentation navigation">
+        <nav
+          className="presentation-nav"
+          role="navigation"
+          aria-label="Presentation navigation"
+        >
           <button
             className="help-button"
             onClick={announceHelp}
@@ -244,7 +265,11 @@ export default function PresentationApp() {
         </div>
       </div>
 
-      <div className="sr-only" role="region" aria-label="Presentation instructions">
+      <div
+        className="sr-only"
+        role="region"
+        aria-label="Presentation instructions"
+      >
         <h2>Navigation Instructions</h2>
         <p>This presentation can be navigated using:</p>
         <ul>
@@ -256,5 +281,5 @@ export default function PresentationApp() {
         </ul>
       </div>
     </div>
-  )
+  );
 }
