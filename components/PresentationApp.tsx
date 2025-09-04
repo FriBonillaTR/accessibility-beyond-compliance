@@ -20,7 +20,19 @@ export default function PresentationApp() {
         const { default: Reveal } = await import("reveal.js");
         console.log("[v0] Reveal.js imported successfully");
 
+        console.log("[v0] Checking deckRef.current:", deckRef.current);
+
+        if (!deckRef.current) {
+          console.log("[v0] deckRef.current is null, waiting for DOM...");
+          // Wait a bit for DOM to be ready
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          console.log("[v0] After timeout, deckRef.current:", deckRef.current);
+        }
+
         if (deckRef.current) {
+          console.log(
+            "[v0] DOM element found, proceeding with initialization..."
+          );
           const prefersReducedMotion =
             typeof window !== "undefined"
               ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -74,6 +86,9 @@ export default function PresentationApp() {
             console.log("[v0] Slide changed to:", event.indexh);
             setCurrentSlide(event.indexh);
           });
+        } else {
+          console.error("[v0] deckRef.current is still null after timeout");
+          throw new Error("Could not find presentation container element");
         }
       } catch (err) {
         console.error("[v0] Failed to load Reveal.js:", err);
@@ -82,7 +97,8 @@ export default function PresentationApp() {
       }
     };
 
-    loadReveal();
+    const timer = setTimeout(loadReveal, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   const announceToScreenReader = (message: string) => {
