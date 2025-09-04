@@ -49,12 +49,14 @@ export default function PresentationApp() {
           const deck = new Reveal(deckRef.current, {
             hash: true,
             keyboard: {
+              37: "left", // Left arrow
+              39: "right", // Right arrow
+              38: () => goToFirstSlide(), // Up arrow - first slide
+              40: () => goToLastSlide(), // Down arrow - last slide
               13: "next", // Enter
               32: "next", // Space
-              37: "left", // Left arrow
-              38: "up", // Up arrow
-              39: "right", // Right arrow
-              40: "down", // Down arrow
+              36: () => goToFirstSlide(), // Home key
+              35: () => goToLastSlide(), // End key
               72: () => announceHelp(), // H key for help
               27: () => focusCurrentSlide(), // Escape to focus slide
               70: () => togglePresentationMode(), // F key for fullscreen/presentation mode
@@ -115,55 +117,6 @@ export default function PresentationApp() {
     const timer = setTimeout(loadReveal, 50);
     return () => clearTimeout(timer);
   }, [animationsEnabled, totalSlides]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Only handle if not in an input field
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement
-      ) {
-        return;
-      }
-
-      switch (event.key) {
-        case "ArrowLeft":
-          event.preventDefault();
-          prevSlide();
-          break;
-        case "ArrowRight":
-          event.preventDefault();
-          nextSlide();
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          goToFirstSlide();
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          goToLastSlide();
-          break;
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          nextSlide();
-          break;
-        case "Home":
-          event.preventDefault();
-          goToFirstSlide();
-          break;
-        case "End":
-          event.preventDefault();
-          goToLastSlide();
-          break;
-      }
-    };
-
-    if (isInitialized) {
-      document.addEventListener("keydown", handleKeyDown);
-      return () => document.removeEventListener("keydown", handleKeyDown);
-    }
-  }, [isInitialized]);
 
   const announceToScreenReader = (message: string) => {
     const announcement = document.createElement("div");
@@ -228,11 +181,17 @@ export default function PresentationApp() {
   };
 
   const goToFirstSlide = () => {
-    goToSlide(0);
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.slide(0);
+      announceToScreenReader("Navigated to first slide");
+    }
   };
 
   const goToLastSlide = () => {
-    goToSlide(totalSlides - 1);
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.slide(totalSlides - 1);
+      announceToScreenReader("Navigated to last slide");
+    }
   };
 
   const nextSlide = () => {
