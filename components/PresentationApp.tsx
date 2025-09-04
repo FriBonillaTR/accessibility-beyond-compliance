@@ -65,8 +65,6 @@ export default function PresentationApp() {
                   announceToScreenReader("Navigated to last slide");
                 }
               },
-              13: "next", // Enter
-              32: "next", // Space
               36: () => {
                 // Home key - go to first slide
                 if (deckInstanceRef.current) {
@@ -233,6 +231,7 @@ export default function PresentationApp() {
   const handleButtonClick =
     (action: () => void) => (event: React.MouseEvent) => {
       event.preventDefault();
+      event.stopPropagation();
       action();
     };
 
@@ -240,6 +239,7 @@ export default function PresentationApp() {
     (action: () => void) => (event: React.KeyboardEvent) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
+        event.stopPropagation();
         action();
       }
     };
