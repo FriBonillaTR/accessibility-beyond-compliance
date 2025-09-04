@@ -1,191 +1,137 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import Reveal from "reveal.js"
-
-// Import slide components
-import TitleSlide from "./slides/TitleSlide"
-import OverviewSlide from "./slides/OverviewSlide"
-import LimitsOfComplianceSlide from "./slides/LimitsOfComplianceSlide"
-import AccessibilityMeetsIdentitySlide from "./slides/AccessibilityMeetsIdentitySlide"
-import DesigningWithIntentionSlide from "./slides/DesigningWithIntentionSlide"
-import ConclusionSlide from "./slides/ConclusionSlide"
+import { useEffect, useRef, useState } from "react";
 
 export default function PresentationApp() {
-  const deckRef = useRef<HTMLDivElement>(null)
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [totalSlides, setTotalSlides] = useState(6)
-  const [isInitialized, setIsInitialized] = useState(false)
+  const deckRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [totalSlides, setTotalSlides] = useState(6);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (deckRef.current) {
-      const prefersReducedMotion =
-        typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion: reduce)").matches : false
+    const loadReveal = async () => {
+      try {
+        const { default: Reveal } = await import("reveal.js");
 
-      const deck = new Reveal(deckRef.current, {
-        // Accessibility configuration
-        hash: true,
-        keyboard: {
-          // Enhanced keyboard navigation
-          13: "next", // Enter
-          32: "next", // Space
-          37: "left", // Left arrow
-          38: "up", // Up arrow
-          39: "right", // Right arrow
-          40: "down", // Down arrow
-          72: () => {
-            // H key for help
-            announceHelp()
-          },
-          27: () => {
-            // Escape key to focus on current slide
-            const current = document.querySelector(".present") as HTMLElement
-            if (current) current.focus()
-          },
-        },
-        touch: true,
-        loop: false,
-        rtl: false,
-        navigationMode: "default",
+        if (deckRef.current) {
+          const prefersReducedMotion =
+            typeof window !== "undefined"
+              ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              : false;
 
-        transition: prefersReducedMotion ? "none" : "slide",
-        transitionSpeed: prefersReducedMotion ? 0 : "default",
+          const deck = new Reveal(deckRef.current, {
+            hash: true,
+            keyboard: {
+              13: "next", // Enter
+              32: "next", // Space
+              37: "left", // Left arrow
+              38: "up", // Up arrow
+              39: "right", // Right arrow
+              40: "down", // Down arrow
+            },
+            touch: true,
+            loop: false,
+            transition: prefersReducedMotion ? "none" : "slide",
+            transitionSpeed: prefersReducedMotion ? 0 : "default",
+            controls: true,
+            progress: true,
+            center: true,
+            viewDistance: 3,
+            mobileViewDistance: 2,
+          });
 
-        // Controls and progress
-        controls: true,
-        controlsTutorial: false,
-        controlsLayout: "bottom-right",
-        controlsBackArrows: "faded",
-        progress: true,
-        center: true,
-        showNotes: false,
+          await deck.initialize();
+          setIsInitialized(true);
 
-        // View distance for performance
-        viewDistance: 3,
-        mobileViewDistance: 2,
+          const slides = deckRef.current?.querySelectorAll(".slides section");
+          slides?.forEach((slide, index) => {
+            slide.setAttribute("role", "tabpanel");
+            slide.setAttribute(
+              "aria-label",
+              `Slide ${index + 1} of ${slides.length}`
+            );
+            slide.setAttribute("tabindex", "-1");
+          });
 
-        // Plugins and dependencies
-        dependencies: [],
-
-        // Keyboard navigation
-        keyboardCondition: null, // Always allow keyboard navigation
-      })
-
-      deck.initialize().then(() => {
-        setIsInitialized(true)
-
-        const slides = deckRef.current?.querySelectorAll(".slides section")
-        slides?.forEach((slide, index) => {
-          slide.setAttribute("role", "tabpanel")
-          slide.setAttribute("aria-label", `Slide ${index + 1} of ${slides.length}`)
-          slide.setAttribute("tabindex", "-1")
-
-          // Add slide number for screen readers
-          const slideNumber = document.createElement("span")
-          slideNumber.className = "sr-only"
-          slideNumber.textContent = `Slide ${index + 1} of ${slides.length}`
-          slide.insertBefore(slideNumber, slide.firstChild)
-        })
-
-        deck.on("slidechanged", (event) => {
-          const slideIndex = event.indexh
-          setCurrentSlide(slideIndex)
-
-          // Announce slide change to screen readers
-          const slideTitle = event.currentSlide.querySelector("h1, h2, h3")?.textContent || `Slide ${slideIndex + 1}`
-          announceToScreenReader(`Now viewing: ${slideTitle}`)
-
-          // Focus management
-          setTimeout(() => {
-            const currentSlideElement = event.currentSlide as HTMLElement
-            if (currentSlideElement) {
-              currentSlideElement.focus()
-            }
-          }, 100)
-        })
-
-        const skipLink = document.querySelector(".skip-link") as HTMLAnchorElement
-        if (skipLink) {
-          skipLink.addEventListener("click", (e) => {
-            e.preventDefault()
-            const currentSlide = document.querySelector(".present") as HTMLElement
-            if (currentSlide) {
-              currentSlide.focus()
-              announceToScreenReader("Skipped to main presentation content")
-            }
-          })
+          deck.on("slidechanged", (event) => {
+            setCurrentSlide(event.indexh);
+          });
         }
-
-        const helpButton = document.querySelector(".help-button") as HTMLButtonElement
-        if (helpButton) {
-          helpButton.addEventListener("click", announceHelp)
-        }
-
-        // Initial focus and announcement
-        const firstSlide = document.querySelector(".present") as HTMLElement
-        if (firstSlide) {
-          firstSlide.focus()
-          announceToScreenReader("Presentation loaded. Use arrow keys or space to navigate.")
-        }
-      })
-
-      return () => {
-        deck.destroy()
+      } catch (err) {
+        console.error("Failed to load Reveal.js:", err);
+        setError("Failed to load presentation library");
       }
-    }
-  }, [])
+    };
+
+    loadReveal();
+  }, []);
 
   const announceToScreenReader = (message: string) => {
-    const announcement = document.createElement("div")
-    announcement.setAttribute("aria-live", "polite")
-    announcement.setAttribute("aria-atomic", "true")
-    announcement.className = "sr-only"
-    announcement.textContent = message
+    const announcement = document.createElement("div");
+    announcement.setAttribute("aria-live", "polite");
+    announcement.setAttribute("aria-atomic", "true");
+    announcement.className = "sr-only";
+    announcement.textContent = message;
 
-    document.body.appendChild(announcement)
+    document.body.appendChild(announcement);
 
     setTimeout(() => {
-      document.body.removeChild(announcement)
-    }, 1000)
-  }
+      document.body.removeChild(announcement);
+    }, 1000);
+  };
 
   const announceHelp = () => {
     const helpText =
-      "Keyboard navigation: Use arrow keys, space, or enter to navigate slides. Press H for help, Escape to focus current slide."
-    announceToScreenReader(helpText)
-  }
+      "Keyboard navigation: Use arrow keys, space, or enter to navigate slides. Press H for help, Escape to focus current slide.";
+    announceToScreenReader(helpText);
+  };
 
   const goToSlide = (slideIndex: number) => {
     if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck
+      const deck = (deckRef.current as any).deck;
       if (deck) {
-        deck.slide(slideIndex)
+        deck.slide(slideIndex);
       }
     }
-  }
+  };
 
   const nextSlide = () => {
     if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck
+      const deck = (deckRef.current as any).deck;
       if (deck) {
-        deck.next()
+        deck.next();
       }
     }
-  }
+  };
 
   const prevSlide = () => {
     if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck
+      const deck = (deckRef.current as any).deck;
       if (deck) {
-        deck.prev()
+        deck.prev();
       }
     }
+  };
+
+  if (error) {
+    return (
+      <div className="presentation-error">
+        <h1>Error Loading Presentation</h1>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
   }
 
   return (
     <div className="presentation-container">
       <header className="presentation-header" role="banner">
-        <nav className="presentation-nav" role="navigation" aria-label="Presentation navigation">
+        <nav
+          className="presentation-nav"
+          role="navigation"
+          aria-label="Presentation navigation"
+        >
           <button
             className="help-button"
             onClick={announceHelp}
@@ -231,22 +177,68 @@ export default function PresentationApp() {
         role="application"
         aria-label="Accessibility Beyond Compliance Presentation"
       >
-        {/* Skip link for keyboard navigation */}
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
+        <div className="slides" role="main">
+          <section>
+            <h1>Accessibility Beyond Compliance</h1>
+            <p>A mindset, not a checklist</p>
+            <p className="author">Thomson Reuters Presentation</p>
+          </section>
 
-        <div className="slides" id="main-content" role="main">
-          <TitleSlide />
-          <OverviewSlide />
-          <LimitsOfComplianceSlide />
-          <AccessibilityMeetsIdentitySlide />
-          <DesigningWithIntentionSlide />
-          <ConclusionSlide />
+          <section>
+            <h2>Overview</h2>
+            <ul>
+              <li>The Limits of Compliance</li>
+              <li>Where Accessibility Meets Identity</li>
+              <li>Designing with Intention</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>The Limits of Compliance</h2>
+            <p>Compliance is the floor, not the ceiling</p>
+            <ul>
+              <li>WCAG guidelines are minimum standards</li>
+              <li>Real accessibility requires understanding user needs</li>
+              <li>Context matters more than checkboxes</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Where Accessibility Meets Identity</h2>
+            <p>Inclusive design reflects who we are</p>
+            <ul>
+              <li>Accessibility as a core value</li>
+              <li>Building empathy into our process</li>
+              <li>Creating experiences for everyone</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Designing with Intention</h2>
+            <p>Every decision impacts accessibility</p>
+            <ul>
+              <li>Consider accessibility from the start</li>
+              <li>Test with real users</li>
+              <li>Iterate based on feedback</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Conclusion</h2>
+            <p>
+              Accessibility is not just about compliance—it's about creating
+              inclusive experiences that work for everyone.
+            </p>
+            <p>Thank you</p>
+          </section>
         </div>
       </div>
 
-      <div className="sr-only" role="region" aria-label="Presentation instructions">
+      <div
+        className="sr-only"
+        role="region"
+        aria-label="Presentation instructions"
+      >
         <h2>Navigation Instructions</h2>
         <p>This presentation can be navigated using:</p>
         <ul>
@@ -258,5 +250,5 @@ export default function PresentationApp() {
         </ul>
       </div>
     </div>
-  )
+  );
 }

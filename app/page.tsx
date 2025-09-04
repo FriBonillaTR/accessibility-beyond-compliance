@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const PresentationApp = dynamic(() => import("@/components/PresentationApp"), {
+const PresentationApp = dynamic(() => import("../components/PresentationApp"), {
   ssr: false,
   loading: () => (
     <div className="loading-container">
@@ -13,10 +13,15 @@ const PresentationApp = dynamic(() => import("@/components/PresentationApp"), {
       >
         <span className="sr-only">Loading presentation...</span>
       </div>
+      <p>Loading presentation...</p>
     </div>
   ),
 });
 
 export default function Home() {
-  return <PresentationApp />;
+  return (
+    <div>
+      <PresentationApp />
+    </div>
+  );
 }
