@@ -66,7 +66,7 @@
   }
 }
 
-/* Thomson Reuters brand colors */
+/* Added Thomson Reuters brand colors and presentation styles */
 :root {
   --tr-orange: #ff6200;
   --tr-blue: #0066cc;
@@ -77,7 +77,7 @@
 
 /* Presentation-specific styles */
 .reveal {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .reveal .slides section {
@@ -104,6 +104,107 @@
 .reveal .slides section:focus {
   outline: 3px solid var(--tr-orange);
   outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.presentation-container {
+  min-height: 100vh;
+  background: white;
+}
+
+.presentation-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0.5rem 1rem;
+}
+
+.presentation-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.help-button {
+  background: var(--tr-blue);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.help-button:hover {
+  background: var(--tr-dark-blue);
+}
+
+.slide-counter {
+  font-weight: 500;
+  color: var(--tr-dark-blue);
+}
+
+.nav-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-button {
+  background: var(--tr-orange);
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: #e55a00;
+}
+
+.nav-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--tr-orange);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 1001;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
