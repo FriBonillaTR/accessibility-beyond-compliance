@@ -13,7 +13,6 @@ const PresentationApp = dynamic(() => import("../components/PresentationApp"), {
       >
         <span className="sr-only">Loading presentation...</span>
       </div>
-      <p>Loading presentation...</p>
     </div>
   ),
 });

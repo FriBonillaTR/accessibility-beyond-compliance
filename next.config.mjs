@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  output: "export",
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  distDir: 'out',
+  distDir: "out",
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -11,14 +11,24 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true
+    unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/accessibility-presentation' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/accessibility-presentation/' : '',
-  
-  experimental: {
-    optimizePackageImports: ['reveal.js']
-  }
-}
+  basePath:
+    process.env.NODE_ENV === "production" && process.env.GITHUB_REPOSITORY
+      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}`
+      : "",
+  assetPrefix:
+    process.env.NODE_ENV === "production" && process.env.GITHUB_REPOSITORY
+      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
+      : "",
 
-export default nextConfig
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+    return config;
+  },
+};
+
+export default nextConfig;

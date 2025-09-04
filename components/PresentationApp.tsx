@@ -7,11 +7,14 @@ export default function PresentationApp() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [totalSlides, setTotalSlides] = useState(6);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadReveal = async () => {
       try {
+        setIsLoading(true);
+
         const { default: Reveal } = await import("reveal.js");
 
         if (deckRef.current) {
@@ -39,10 +42,13 @@ export default function PresentationApp() {
             center: true,
             viewDistance: 3,
             mobileViewDistance: 2,
+            theme: null,
+            plugins: [],
           });
 
           await deck.initialize();
           setIsInitialized(true);
+          setIsLoading(false);
 
           const slides = deckRef.current?.querySelectorAll(".slides section");
           slides?.forEach((slide, index) => {
@@ -61,6 +67,7 @@ export default function PresentationApp() {
       } catch (err) {
         console.error("Failed to load Reveal.js:", err);
         setError("Failed to load presentation library");
+        setIsLoading(false);
       }
     };
 
@@ -113,6 +120,20 @@ export default function PresentationApp() {
       }
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="presentation-loading">
+        <div
+          className="loading-spinner"
+          role="status"
+          aria-label="Initializing presentation"
+        >
+          <span className="sr-only">Initializing presentation...</span>
+        </div>
+      </div>
+    );
+  }
 
   if (error) {
     return (
