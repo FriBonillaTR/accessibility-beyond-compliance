@@ -1,7 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/* Removed Tailwind directives and @layer syntax that was causing webpack errors */
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
@@ -28,6 +25,13 @@
   --chart-3: 197 37% 24%;
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
+
+  /* Thomson Reuters brand colors */
+  --tr-orange: #ff6200;
+  --tr-blue: #0066cc;
+  --tr-dark-blue: #003366;
+  --tr-light-gray: #f5f5f5;
+  --tr-dark-gray: #333333;
 }
 
 .dark {
@@ -57,27 +61,22 @@
   --chart-5: 340 75% 55%;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Converted Tailwind @apply directives to regular CSS */
+* {
+  border-color: hsl(var(--border));
 }
 
-/* Added Thomson Reuters brand colors and presentation styles */
-:root {
-  --tr-orange: #ff6200;
-  --tr-blue: #0066cc;
-  --tr-dark-blue: #003366;
-  --tr-light-gray: #f5f5f5;
-  --tr-dark-gray: #333333;
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 /* Presentation-specific styles */
 .reveal {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .reveal .slides section {
