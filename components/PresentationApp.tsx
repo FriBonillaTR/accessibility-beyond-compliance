@@ -142,83 +142,14 @@ export default function PresentationApp() {
   console.log("[v0] Current loading state:", isLoading);
   console.log("[v0] Current initialized state:", isInitialized);
 
-  if (isLoading) {
-    console.log("[v0] Rendering loading screen");
-    return (
-      <div className="presentation-loading">
-        <div
-          className="loading-spinner"
-          role="status"
-          aria-label="Initializing presentation"
-        >
-          <span className="sr-only">Initializing presentation...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="presentation-error">
-        <h1>Error Loading Presentation</h1>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
-      </div>
-    );
-  }
-
   return (
     <div className="presentation-container">
-      <header className="presentation-header" role="banner">
-        <nav
-          className="presentation-nav"
-          role="navigation"
-          aria-label="Presentation navigation"
-        >
-          <button
-            className="help-button"
-            onClick={announceHelp}
-            aria-label="Get keyboard navigation help"
-            title="Press H for keyboard help"
-          >
-            <span className="sr-only">Help</span>
-            <span aria-hidden="true">?</span>
-          </button>
-
-          <div className="slide-counter" aria-live="polite" aria-atomic="true">
-            <span className="sr-only">Currently viewing </span>
-            Slide {currentSlide + 1} of {totalSlides}
-          </div>
-
-          <div className="nav-controls">
-            <button
-              onClick={prevSlide}
-              disabled={currentSlide === 0}
-              aria-label="Go to previous slide"
-              className="nav-button prev-button"
-            >
-              <span aria-hidden="true">‹</span>
-              <span className="sr-only">Previous</span>
-            </button>
-
-            <button
-              onClick={nextSlide}
-              disabled={currentSlide === totalSlides - 1}
-              aria-label="Go to next slide"
-              className="nav-button next-button"
-            >
-              <span aria-hidden="true">›</span>
-              <span className="sr-only">Next</span>
-            </button>
-          </div>
-        </nav>
-      </header>
-
       <div
         className="reveal"
         ref={deckRef}
         role="application"
         aria-label="Accessibility Beyond Compliance Presentation"
+        style={{ display: isLoading || error ? "none" : "block" }}
       >
         <div className="slides" role="main">
           <section>
@@ -277,21 +208,94 @@ export default function PresentationApp() {
         </div>
       </div>
 
-      <div
-        className="sr-only"
-        role="region"
-        aria-label="Presentation instructions"
-      >
-        <h2>Navigation Instructions</h2>
-        <p>This presentation can be navigated using:</p>
-        <ul>
-          <li>Arrow keys to move between slides</li>
-          <li>Space bar or Enter to advance to next slide</li>
-          <li>Tab to navigate interactive elements</li>
-          <li>H key to hear navigation help</li>
-          <li>Escape key to focus on current slide</li>
-        </ul>
-      </div>
+      {isLoading && (
+        <div className="presentation-loading">
+          <div
+            className="loading-spinner"
+            role="status"
+            aria-label="Initializing presentation"
+          >
+            <span className="sr-only">Initializing presentation...</span>
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="presentation-error">
+          <h1>Error Loading Presentation</h1>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      )}
+
+      {!isLoading && !error && (
+        <>
+          <header className="presentation-header" role="banner">
+            <nav
+              className="presentation-nav"
+              role="navigation"
+              aria-label="Presentation navigation"
+            >
+              <button
+                className="help-button"
+                onClick={announceHelp}
+                aria-label="Get keyboard navigation help"
+                title="Press H for keyboard help"
+              >
+                <span className="sr-only">Help</span>
+                <span aria-hidden="true">?</span>
+              </button>
+
+              <div
+                className="slide-counter"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <span className="sr-only">Currently viewing </span>
+                Slide {currentSlide + 1} of {totalSlides}
+              </div>
+
+              <div className="nav-controls">
+                <button
+                  onClick={prevSlide}
+                  disabled={currentSlide === 0}
+                  aria-label="Go to previous slide"
+                  className="nav-button prev-button"
+                >
+                  <span aria-hidden="true">‹</span>
+                  <span className="sr-only">Previous</span>
+                </button>
+
+                <button
+                  onClick={nextSlide}
+                  disabled={currentSlide === totalSlides - 1}
+                  aria-label="Go to next slide"
+                  className="nav-button next-button"
+                >
+                  <span aria-hidden="true">›</span>
+                  <span className="sr-only">Next</span>
+                </button>
+              </div>
+            </nav>
+          </header>
+
+          <div
+            className="sr-only"
+            role="region"
+            aria-label="Presentation instructions"
+          >
+            <h2>Navigation Instructions</h2>
+            <p>This presentation can be navigated using:</p>
+            <ul>
+              <li>Arrow keys to move between slides</li>
+              <li>Space bar or Enter to advance to next slide</li>
+              <li>Tab to navigate interactive elements</li>
+              <li>H key to hear navigation help</li>
+              <li>Escape key to focus on current slide</li>
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 }
