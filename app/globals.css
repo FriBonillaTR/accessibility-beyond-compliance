@@ -1,4 +1,8 @@
 /* Converted CSS custom properties to regular CSS values to fix webpack loader errors */
+* {
+  border-color: #e4e4e7;
+}
+
 body {
   background-color: #ffffff;
   color: #09090b;
