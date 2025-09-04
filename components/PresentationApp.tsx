@@ -54,8 +54,10 @@ export default function PresentationApp() {
           deckInstanceRef.current = deck;
           console.log("[v0] Reveal.js initialized successfully");
 
+          console.log("[v0] Setting isLoading to false...");
           setIsInitialized(true);
           setIsLoading(false);
+          console.log("[v0] Loading state updated");
 
           const slides = deckRef.current?.querySelectorAll(".slides section");
           console.log("[v0] Found slides:", slides?.length);
@@ -121,7 +123,11 @@ export default function PresentationApp() {
     }
   };
 
+  console.log("[v0] Current loading state:", isLoading);
+  console.log("[v0] Current initialized state:", isInitialized);
+
   if (isLoading) {
+    console.log("[v0] Rendering loading screen");
     return (
       <div className="presentation-loading">
         <div
