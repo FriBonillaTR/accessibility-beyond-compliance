@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { useEffect, useRef, useState } from "react";
 
 export default function PresentationApp() {
@@ -10,6 +12,17 @@ export default function PresentationApp() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPresentationMode, setIsPresentationMode] = useState(false);
+  const [animationsEnabled, setAnimationsEnabled] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
+
+  useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
+    setAnimationsEnabled(!prefersReducedMotion);
+  }, []);
 
   useEffect(() => {
     const loadReveal = async () => {
@@ -24,7 +37,6 @@ export default function PresentationApp() {
 
         if (!deckRef.current) {
           console.log("[v0] deckRef.current is null, waiting for DOM...");
-          // Wait a bit for DOM to be ready
           await new Promise((resolve) => setTimeout(resolve, 100));
           console.log("[v0] After timeout, deckRef.current:", deckRef.current);
         }
@@ -33,10 +45,6 @@ export default function PresentationApp() {
           console.log(
             "[v0] DOM element found, proceeding with initialization..."
           );
-          const prefersReducedMotion =
-            typeof window !== "undefined"
-              ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-              : false;
 
           const deck = new Reveal(deckRef.current, {
             hash: true,
@@ -47,11 +55,15 @@ export default function PresentationApp() {
               38: "up", // Up arrow
               39: "right", // Right arrow
               40: "down", // Down arrow
+              72: () => announceHelp(), // H key for help
+              27: () => focusCurrentSlide(), // Escape to focus slide
+              70: () => togglePresentationMode(), // F key for fullscreen/presentation mode
+              65: () => toggleAnimations(), // A key to toggle animations
             },
             touch: true,
             loop: false,
-            transition: prefersReducedMotion ? "none" : "slide",
-            transitionSpeed: prefersReducedMotion ? 0 : "default",
+            transition: animationsEnabled ? "slide" : "none",
+            transitionSpeed: animationsEnabled ? "default" : 0,
             controls: true,
             progress: true,
             center: true,
@@ -85,6 +97,9 @@ export default function PresentationApp() {
           deck.on("slidechanged", (event) => {
             console.log("[v0] Slide changed to:", event.indexh);
             setCurrentSlide(event.indexh);
+            announceToScreenReader(
+              `Slide ${event.indexh + 1} of ${totalSlides}`
+            );
           });
         } else {
           console.error("[v0] deckRef.current is still null after timeout");
@@ -99,7 +114,56 @@ export default function PresentationApp() {
 
     const timer = setTimeout(loadReveal, 50);
     return () => clearTimeout(timer);
-  }, []);
+  }, [animationsEnabled, totalSlides]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Only handle if not in an input field
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+
+      switch (event.key) {
+        case "ArrowLeft":
+          event.preventDefault();
+          prevSlide();
+          break;
+        case "ArrowRight":
+          event.preventDefault();
+          nextSlide();
+          break;
+        case "ArrowUp":
+          event.preventDefault();
+          goToFirstSlide();
+          break;
+        case "ArrowDown":
+          event.preventDefault();
+          goToLastSlide();
+          break;
+        case "Enter":
+        case " ":
+          event.preventDefault();
+          nextSlide();
+          break;
+        case "Home":
+          event.preventDefault();
+          goToFirstSlide();
+          break;
+        case "End":
+          event.preventDefault();
+          goToLastSlide();
+          break;
+      }
+    };
+
+    if (isInitialized) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [isInitialized]);
 
   const announceToScreenReader = (message: string) => {
     const announcement = document.createElement("div");
@@ -117,14 +181,58 @@ export default function PresentationApp() {
 
   const announceHelp = () => {
     const helpText =
-      "Keyboard navigation: Use arrow keys, space, or enter to navigate slides. Press H for help, Escape to focus current slide.";
+      "Keyboard navigation: Arrow keys to navigate slides. Up arrow or Home for first slide, Down arrow or End for last slide. Space or Enter for next slide. F for presentation mode, A to toggle animations, Escape to focus current slide.";
     announceToScreenReader(helpText);
+  };
+
+  const focusCurrentSlide = () => {
+    const currentSlideElement = deckRef.current?.querySelector(
+      ".slides section.present"
+    );
+    if (currentSlideElement instanceof HTMLElement) {
+      currentSlideElement.focus();
+      announceToScreenReader("Focused on current slide");
+    }
+  };
+
+  const togglePresentationMode = () => {
+    setIsPresentationMode(!isPresentationMode);
+    if (!isPresentationMode) {
+      document.documentElement.requestFullscreen?.();
+      announceToScreenReader("Entered presentation mode");
+    } else {
+      document.exitFullscreen?.();
+      announceToScreenReader("Exited presentation mode");
+    }
+  };
+
+  const toggleAnimations = () => {
+    setAnimationsEnabled(!animationsEnabled);
+    announceToScreenReader(
+      animationsEnabled ? "Animations disabled" : "Animations enabled"
+    );
+
+    // Update Reveal.js configuration
+    if (deckInstanceRef.current) {
+      deckInstanceRef.current.configure({
+        transition: !animationsEnabled ? "slide" : "none",
+        transitionSpeed: !animationsEnabled ? "default" : 0,
+      });
+    }
   };
 
   const goToSlide = (slideIndex: number) => {
     if (deckInstanceRef.current && isInitialized) {
       deckInstanceRef.current.slide(slideIndex);
     }
+  };
+
+  const goToFirstSlide = () => {
+    goToSlide(0);
+  };
+
+  const goToLastSlide = () => {
+    goToSlide(totalSlides - 1);
   };
 
   const nextSlide = () => {
@@ -139,11 +247,27 @@ export default function PresentationApp() {
     }
   };
 
+  const handleButtonClick =
+    (action: () => void) => (event: React.MouseEvent | React.KeyboardEvent) => {
+      if (
+        event.type === "click" ||
+        (event as React.KeyboardEvent).key === "Enter" ||
+        (event as React.KeyboardEvent).key === " "
+      ) {
+        event.preventDefault();
+        action();
+      }
+    };
+
   console.log("[v0] Current loading state:", isLoading);
   console.log("[v0] Current initialized state:", isInitialized);
 
   return (
-    <div className="presentation-container">
+    <div
+      className={`presentation-container ${
+        isPresentationMode ? "presentation-mode" : ""
+      }`}
+    >
       <div
         className="reveal"
         ref={deckRef}
@@ -237,13 +361,16 @@ export default function PresentationApp() {
               aria-label="Presentation navigation"
             >
               <button
-                className="help-button"
-                onClick={announceHelp}
-                aria-label="Get keyboard navigation help"
-                title="Press H for keyboard help"
+                className="info-button"
+                onClick={handleButtonClick(() => setShowInfo(!showInfo))}
+                onKeyDown={handleButtonClick(() => setShowInfo(!showInfo))}
+                aria-label="Show presentation information and keyboard shortcuts"
+                aria-expanded={showInfo}
+                title="Press for presentation info and keyboard shortcuts"
+                tabIndex={0}
               >
-                <span className="sr-only">Help</span>
-                <span aria-hidden="true">?</span>
+                <span className="sr-only">Information</span>
+                <span aria-hidden="true">ℹ</span>
               </button>
 
               <div
@@ -257,27 +384,164 @@ export default function PresentationApp() {
 
               <div className="nav-controls">
                 <button
-                  onClick={prevSlide}
+                  onClick={handleButtonClick(goToFirstSlide)}
+                  onKeyDown={handleButtonClick(goToFirstSlide)}
+                  aria-label="Go to first slide (Up arrow or Home key)"
+                  className="nav-button first-button"
+                  title="First slide (↑ or Home)"
+                  tabIndex={0}
+                >
+                  <span aria-hidden="true">⇈</span>
+                  <span className="sr-only">First</span>
+                </button>
+
+                <button
+                  onClick={handleButtonClick(prevSlide)}
+                  onKeyDown={handleButtonClick(prevSlide)}
                   disabled={currentSlide === 0}
-                  aria-label="Go to previous slide"
+                  aria-label="Go to previous slide (Left arrow key)"
                   className="nav-button prev-button"
+                  title="Previous slide (←)"
+                  tabIndex={0}
                 >
                   <span aria-hidden="true">‹</span>
                   <span className="sr-only">Previous</span>
                 </button>
 
                 <button
-                  onClick={nextSlide}
+                  onClick={handleButtonClick(nextSlide)}
+                  onKeyDown={handleButtonClick(nextSlide)}
                   disabled={currentSlide === totalSlides - 1}
-                  aria-label="Go to next slide"
+                  aria-label="Go to next slide (Right arrow, Space, or Enter key)"
                   className="nav-button next-button"
+                  title="Next slide (→, Space, or Enter)"
+                  tabIndex={0}
                 >
                   <span aria-hidden="true">›</span>
                   <span className="sr-only">Next</span>
                 </button>
+
+                <button
+                  onClick={handleButtonClick(goToLastSlide)}
+                  onKeyDown={handleButtonClick(goToLastSlide)}
+                  aria-label="Go to last slide (Down arrow or End key)"
+                  className="nav-button last-button"
+                  title="Last slide (↓ or End)"
+                  tabIndex={0}
+                >
+                  <span aria-hidden="true">⇊</span>
+                  <span className="sr-only">Last</span>
+                </button>
+              </div>
+
+              <div className="accessibility-controls">
+                <button
+                  onClick={handleButtonClick(togglePresentationMode)}
+                  onKeyDown={handleButtonClick(togglePresentationMode)}
+                  aria-label={
+                    isPresentationMode
+                      ? "Exit presentation mode"
+                      : "Enter presentation mode (F key)"
+                  }
+                  className="control-button presentation-button"
+                  title="Presentation mode (F)"
+                  tabIndex={0}
+                >
+                  <span aria-hidden="true">
+                    {isPresentationMode ? "⊡" : "⊞"}
+                  </span>
+                  <span className="sr-only">
+                    {isPresentationMode ? "Exit" : "Present"}
+                  </span>
+                </button>
+
+                <button
+                  onClick={handleButtonClick(toggleAnimations)}
+                  onKeyDown={handleButtonClick(toggleAnimations)}
+                  aria-label={
+                    animationsEnabled
+                      ? "Disable animations (A key)"
+                      : "Enable animations (A key)"
+                  }
+                  className="control-button animation-button"
+                  title="Toggle animations (A)"
+                  tabIndex={0}
+                >
+                  <span aria-hidden="true">
+                    {animationsEnabled ? "🎬" : "⏸"}
+                  </span>
+                  <span className="sr-only">
+                    {animationsEnabled ? "Disable" : "Enable"} animations
+                  </span>
+                </button>
               </div>
             </nav>
           </header>
+
+          {showInfo && (
+            <div
+              className="info-panel"
+              role="dialog"
+              aria-labelledby="info-title"
+              aria-modal="false"
+            >
+              <div className="info-content">
+                <h2 id="info-title">Presentation Information</h2>
+                <div className="info-section">
+                  <h3>Navigation</h3>
+                  <ul>
+                    <li>
+                      <kbd>←</kbd> <kbd>→</kbd> Previous/Next slide
+                    </li>
+                    <li>
+                      <kbd>↑</kbd> <kbd>Home</kbd> First slide
+                    </li>
+                    <li>
+                      <kbd>↓</kbd> <kbd>End</kbd> Last slide
+                    </li>
+                    <li>
+                      <kbd>Space</kbd> <kbd>Enter</kbd> Next slide
+                    </li>
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <h3>Controls</h3>
+                  <ul>
+                    <li>
+                      <kbd>F</kbd> Toggle presentation mode
+                    </li>
+                    <li>
+                      <kbd>A</kbd> Toggle animations
+                    </li>
+                    <li>
+                      <kbd>H</kbd> Hear navigation help
+                    </li>
+                    <li>
+                      <kbd>Esc</kbd> Focus current slide
+                    </li>
+                  </ul>
+                </div>
+                <div className="info-section">
+                  <h3>Accessibility Features</h3>
+                  <ul>
+                    <li>Screen reader announcements for slide changes</li>
+                    <li>Keyboard navigation support</li>
+                    <li>Reduced motion respect</li>
+                    <li>High contrast support</li>
+                  </ul>
+                </div>
+                <button
+                  onClick={handleButtonClick(() => setShowInfo(false))}
+                  onKeyDown={handleButtonClick(() => setShowInfo(false))}
+                  className="close-info-button"
+                  aria-label="Close information panel"
+                  tabIndex={0}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
 
           <div
             className="sr-only"
@@ -287,10 +551,15 @@ export default function PresentationApp() {
             <h2>Navigation Instructions</h2>
             <p>This presentation can be navigated using:</p>
             <ul>
-              <li>Arrow keys to move between slides</li>
+              <li>
+                Arrow keys to move between slides (Up/Home for first, Down/End
+                for last)
+              </li>
               <li>Space bar or Enter to advance to next slide</li>
               <li>Tab to navigate interactive elements</li>
               <li>H key to hear navigation help</li>
+              <li>F key for presentation mode</li>
+              <li>A key to toggle animations</li>
               <li>Escape key to focus on current slide</li>
             </ul>
           </div>
