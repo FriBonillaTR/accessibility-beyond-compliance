@@ -51,12 +51,36 @@ export default function PresentationApp() {
             keyboard: {
               37: "left", // Left arrow
               39: "right", // Right arrow
-              38: () => goToFirstSlide(), // Up arrow - first slide
-              40: () => goToLastSlide(), // Down arrow - last slide
+              38: () => {
+                // Up arrow - go to first slide
+                if (deckInstanceRef.current) {
+                  deckInstanceRef.current.slide(0);
+                  announceToScreenReader("Navigated to first slide");
+                }
+              },
+              40: () => {
+                // Down arrow - go to last slide
+                if (deckInstanceRef.current) {
+                  deckInstanceRef.current.slide(totalSlides - 1);
+                  announceToScreenReader("Navigated to last slide");
+                }
+              },
               13: "next", // Enter
               32: "next", // Space
-              36: () => goToFirstSlide(), // Home key
-              35: () => goToLastSlide(), // End key
+              36: () => {
+                // Home key - go to first slide
+                if (deckInstanceRef.current) {
+                  deckInstanceRef.current.slide(0);
+                  announceToScreenReader("Navigated to first slide");
+                }
+              },
+              35: () => {
+                // End key - go to last slide
+                if (deckInstanceRef.current) {
+                  deckInstanceRef.current.slide(totalSlides - 1);
+                  announceToScreenReader("Navigated to last slide");
+                }
+              },
               72: () => announceHelp(), // H key for help
               27: () => focusCurrentSlide(), // Escape to focus slide
               70: () => togglePresentationMode(), // F key for fullscreen/presentation mode
@@ -207,15 +231,9 @@ export default function PresentationApp() {
   };
 
   const handleButtonClick =
-    (action: () => void) => (event: React.MouseEvent | React.KeyboardEvent) => {
-      if (
-        event.type === "click" ||
-        (event as React.KeyboardEvent).key === "Enter" ||
-        (event as React.KeyboardEvent).key === " "
-      ) {
-        event.preventDefault();
-        action();
-      }
+    (action: () => void) => (event: React.MouseEvent) => {
+      event.preventDefault();
+      action();
     };
 
   console.log("[v0] Current loading state:", isLoading);
@@ -322,7 +340,6 @@ export default function PresentationApp() {
               <button
                 className="info-button"
                 onClick={handleButtonClick(() => setShowInfo(!showInfo))}
-                onKeyDown={handleButtonClick(() => setShowInfo(!showInfo))}
                 aria-label="Show presentation information and keyboard shortcuts"
                 aria-expanded={showInfo}
                 title="Press for presentation info and keyboard shortcuts"
@@ -344,7 +361,6 @@ export default function PresentationApp() {
               <div className="nav-controls">
                 <button
                   onClick={handleButtonClick(goToFirstSlide)}
-                  onKeyDown={handleButtonClick(goToFirstSlide)}
                   aria-label="Go to first slide (Up arrow or Home key)"
                   className="nav-button first-button"
                   title="First slide (↑ or Home)"
@@ -356,7 +372,6 @@ export default function PresentationApp() {
 
                 <button
                   onClick={handleButtonClick(prevSlide)}
-                  onKeyDown={handleButtonClick(prevSlide)}
                   disabled={currentSlide === 0}
                   aria-label="Go to previous slide (Left arrow key)"
                   className="nav-button prev-button"
@@ -369,7 +384,6 @@ export default function PresentationApp() {
 
                 <button
                   onClick={handleButtonClick(nextSlide)}
-                  onKeyDown={handleButtonClick(nextSlide)}
                   disabled={currentSlide === totalSlides - 1}
                   aria-label="Go to next slide (Right arrow, Space, or Enter key)"
                   className="nav-button next-button"
@@ -382,7 +396,6 @@ export default function PresentationApp() {
 
                 <button
                   onClick={handleButtonClick(goToLastSlide)}
-                  onKeyDown={handleButtonClick(goToLastSlide)}
                   aria-label="Go to last slide (Down arrow or End key)"
                   className="nav-button last-button"
                   title="Last slide (↓ or End)"
@@ -396,7 +409,6 @@ export default function PresentationApp() {
               <div className="accessibility-controls">
                 <button
                   onClick={handleButtonClick(togglePresentationMode)}
-                  onKeyDown={handleButtonClick(togglePresentationMode)}
                   aria-label={
                     isPresentationMode
                       ? "Exit presentation mode"
@@ -416,7 +428,6 @@ export default function PresentationApp() {
 
                 <button
                   onClick={handleButtonClick(toggleAnimations)}
-                  onKeyDown={handleButtonClick(toggleAnimations)}
                   aria-label={
                     animationsEnabled
                       ? "Disable animations (A key)"
@@ -491,7 +502,6 @@ export default function PresentationApp() {
                 </div>
                 <button
                   onClick={handleButtonClick(() => setShowInfo(false))}
-                  onKeyDown={handleButtonClick(() => setShowInfo(false))}
                   className="close-info-button"
                   aria-label="Close information panel"
                   tabIndex={0}
