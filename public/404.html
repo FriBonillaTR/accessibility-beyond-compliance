@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Accessibility Presentation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0D2C54 0%, #1C4E80 100%);
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #FF6200;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .button {
+            display: inline-block;
+            background: #FF6200;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background: #e55a00;
+            transform: translateY(-2px);
+        }
+        .button:focus {
+            outline: 3px solid white;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>404 - Page Not Found</h1>
+        <p>The page you're looking for doesn't exist. You might want to return to the presentation.</p>
+        <a href="/accessibility-presentation/" class="button" aria-label="Return to accessibility presentation homepage">
+            Return to Presentation
+        </a>
+    </div>
+    
+    <script>
+        // Redirect to the main presentation if this is accessed directly
+        if (window.location.pathname === '/404.html') {
+            setTimeout(() => {
+                window.location.href = '/accessibility-presentation/';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
