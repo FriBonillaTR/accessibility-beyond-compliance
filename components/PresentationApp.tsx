@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function PresentationApp() {
   const deckRef = useRef<HTMLDivElement>(null);
+  const deckInstanceRef = useRef<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [totalSlides, setTotalSlides] = useState(6);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -13,9 +14,11 @@ export default function PresentationApp() {
   useEffect(() => {
     const loadReveal = async () => {
       try {
+        console.log("[v0] Starting Reveal.js initialization...");
         setIsLoading(true);
 
         const { default: Reveal } = await import("reveal.js");
+        console.log("[v0] Reveal.js imported successfully");
 
         if (deckRef.current) {
           const prefersReducedMotion =
@@ -46,11 +49,16 @@ export default function PresentationApp() {
             plugins: [],
           });
 
+          console.log("[v0] Reveal.js deck created, initializing...");
           await deck.initialize();
+          deckInstanceRef.current = deck;
+          console.log("[v0] Reveal.js initialized successfully");
+
           setIsInitialized(true);
           setIsLoading(false);
 
           const slides = deckRef.current?.querySelectorAll(".slides section");
+          console.log("[v0] Found slides:", slides?.length);
           slides?.forEach((slide, index) => {
             slide.setAttribute("role", "tabpanel");
             slide.setAttribute(
@@ -61,11 +69,12 @@ export default function PresentationApp() {
           });
 
           deck.on("slidechanged", (event) => {
+            console.log("[v0] Slide changed to:", event.indexh);
             setCurrentSlide(event.indexh);
           });
         }
       } catch (err) {
-        console.error("Failed to load Reveal.js:", err);
+        console.error("[v0] Failed to load Reveal.js:", err);
         setError("Failed to load presentation library");
         setIsLoading(false);
       }
@@ -95,29 +104,20 @@ export default function PresentationApp() {
   };
 
   const goToSlide = (slideIndex: number) => {
-    if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck;
-      if (deck) {
-        deck.slide(slideIndex);
-      }
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.slide(slideIndex);
     }
   };
 
   const nextSlide = () => {
-    if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck;
-      if (deck) {
-        deck.next();
-      }
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.next();
     }
   };
 
   const prevSlide = () => {
-    if (deckRef.current && isInitialized) {
-      const deck = (deckRef.current as any).deck;
-      if (deck) {
-        deck.prev();
-      }
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.prev();
     }
   };
 
