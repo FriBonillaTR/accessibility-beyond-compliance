@@ -27,14 +27,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Clear npm cache
         run: npm cache clean --force
 
-      - name: Install dependencies
+      - name: Install dependencies (public packages only)
         run: |
           rm -f package-lock.json
-          npm install
+          npm install --ignore-optional --no-optional
+        continue-on-error: true
+
+      - name: Fallback installation
+        run: |
+          npm install --legacy-peer-deps
+        if: failure()
 
       - name: Build application
         run: npm run build
