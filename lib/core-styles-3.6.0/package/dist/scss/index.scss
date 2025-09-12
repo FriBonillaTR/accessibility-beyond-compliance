@@ -1,0 +1,29 @@
+/* Global stylesheet for @saffron/core-components library */
+
+/* Consumer usage:
+@include saf-setup-z-index();
+*/
+@forward './z-index' as saf-*;
+
+/* Consumer usage:
+@include saf-setup-density();
+*/
+@forward './density.scss' as saf-*;
+
+/* Consumer usage:
+@include saf-setup-tokens();
+*/
+@forward './setup-tokens' as saf-*;
+
+@use './normalize/global-elements.scss';
+@use './normalize/global-hidden.scss';
+@use './normalize/global-text-level.scss';
+@use './fonts.scss';
+@use './typography.scss';
+@use './z-index' as saf-z-index;
+@use './density.scss' as saf-density;
+@use '../tokens/variables.css';
+
+// Setup z-index and density tokens at default :root scope
+@include saf-z-index.setup-z-index;
+@include saf-density.setup-density;

@@ -1,5 +1,5 @@
 /* Converted CSS custom properties to regular CSS values to fix webpack loader errors */
-@import "../node_modules/@saffron/core-styles/dist/index.css";
+@import "../lib/core-styles-3.6.0/package/dist/index.css";
 /* @import "../node_modules/@saffron/core-styles/dist/fa.css"; */
 * {
   border-color: #e5e5e5;

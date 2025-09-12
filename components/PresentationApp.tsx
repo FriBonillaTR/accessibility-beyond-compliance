@@ -17,7 +17,9 @@ import DesigningWithIntentionSlide from "./slides/DesigningWithIntentionSlide";
 import ConclusionSlide1 from "./slides/ConclusionSlide1";
 import ConclusionSlide2 from "./slides/ConclusionSlide2";
 import ConclusionSlide3 from "./slides/ConclusionSlide3";
-import { SafButton, SafDialog, SafIcon } from "@saffron/core-components/react";
+import SafButton from "../lib/core-components-3.10.0/package/dist/esm/components/button/define-react.js";
+import SafDialog from "../lib/core-components-3.10.0/package/dist/esm/components/dialog/define-react.js";
+import SafIcon from "../lib/core-components-3.10.0/package/dist/esm/components/icon/define-react.js";
 
 export default function PresentationApp() {
   const deckRef = useRef<HTMLDivElement>(null);

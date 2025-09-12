@@ -1,0 +1,104 @@
+@use 'sass:meta';
+@use 'sass:map';
+@use 'sass:string';
+@use 'sass:list';
+@use '../tokens/variables.scss' as tokens;
+
+/// Converts SCSS variables to CSS variables with optional scoping
+/// @param {String} $selectors - argument list of selectors to scope the CSS variables to
+/// Converts SCSS variables to CSS variables with optional scoping and filtering
+/// @param {List} $filters - List of token names to include (if empty, all tokens are included)
+/// @param {List} $selectors - List of CSS selectors to scope the variables to
+/// @param {Map} $overrides - Map of token values to override default values
+@mixin setup-tokens($filters: [], $selectors: [], $overrides: ()) {
+	// Get all variables from the tokens module
+	$token-map: meta.module-variables('tokens');
+
+	// Filter the token map based on provided filters
+	@if list.length($filters) > 0 {
+		$formatted-filters: [];
+		$filtered-map: ();
+
+		// Handle case when a single string is passed instead of a list
+		@if type-of($filters) == 'string' {
+			// Check if the filter already has the -- prefix
+			$has-prefix: string.index(meta.inspect(string.unquote($filters)), '--');
+			@if not $has-prefix {
+				$formatted-filters: list.append($formatted-filters, $filters);
+			} @else {
+				// Remove the -- prefix for comparison with token map keys
+				$formatted-filters: list.append(
+					$formatted-filters,
+					string.quote(string.slice(meta.inspect(string.unquote($filters)), 3))
+				);
+			}
+		} @else {
+			// Process each filter in the list
+			@each $filter in $filters {
+				// Check if the filter already has the -- prefix
+				$has-prefix: string.index(meta.inspect(string.unquote($filter)), '--');
+				@if not $has-prefix {
+					$formatted-filters: list.append($formatted-filters, $filter, comma);
+				} @else {
+					// Remove the -- prefix for comparison with token map keys
+					$formatted-filters: list.append(
+						$formatted-filters,
+						string.quote(string.slice(meta.inspect(string.unquote($filter)), 3)),
+						comma
+					);
+				}
+			}
+		}
+
+		// Create a new map containing only the filtered tokens
+		@each $token in $formatted-filters {
+			// Only include tokens that exist in the original token map
+			@if map.has-key($token-map, $token) {
+				$filtered-map: map.set($filtered-map, $token, map.get($token-map, $token));
+			}
+		}
+
+		// Use the filtered map if any matches were found
+		@if list.length($filtered-map) > 0 {
+			$token-map: $filtered-map;
+		}
+	}
+
+	// Apply any token value overrides
+	@if list.length($overrides) {
+		$token-map: map.merge($token-map, $overrides);
+	}
+
+	// If selectors are provided, scope the CSS variables to those selectors
+	@if list.length($selectors) > 0 {
+		$selector-list: [];
+
+		// Convert selector arguments to a list
+		@for $i from 0 to list.length($selectors) {
+			$selector-list: list.append($selector-list, list.nth($selectors, $i + 1));
+		}
+
+		$all-selectors: '';
+
+		// Create selector string that includes the element and its pseudo-elements
+		@each $sel in $selector-list {
+			$all-selectors: string.insert($all-selectors, '#{$sel},', -1);
+			$all-selectors: string.insert($all-selectors, '#{$sel}::before,', -1);
+			$all-selectors: string.insert($all-selectors, '#{$sel}::after,', -1);
+		}
+
+		// Output CSS variables scoped to the selectors
+		#{$all-selectors} {
+			@each $name, $value in $token-map {
+				// @note: meta.inspect() is used to preserve the quotes around strings, otherwise sass removes them during compile
+				--#{$name}: #{meta.inspect($value)};
+			}
+		}
+	} @else {
+		// Output CSS variables globally (no selector)
+		@each $name, $value in $token-map {
+			// @note: meta.inspect() is used to preserve the quotes around strings, otherwise sass removes them during compile
+			--#{$name}: #{meta.inspect($value)};
+		}
+	}
+}

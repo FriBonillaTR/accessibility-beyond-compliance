@@ -1,0 +1,291 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vscode-css-languageservice/main/docs/customData.schema.json",
+  "version": 1.1,
+  "properties": [],
+  "pseudoElements": [
+    { "name": "::part(control)", "description": "The anchor element" },
+    {
+      "name": "::part(content)",
+      "description": "The element wrapping anchor content"
+    },
+    { "name": "::part(control)", "description": "The anchor element" },
+    {
+      "name": "::part(content)",
+      "description": "The element wrapping anchor content"
+    },
+    {
+      "name": "::part(backplate)",
+      "description": "The wrapping container for the avatar"
+    },
+    { "name": "::part(content)", "description": "The default slot" },
+    {
+      "name": "::part(control)",
+      "description": "The element wrapping the default slot"
+    },
+    {
+      "name": "::part(list)",
+      "description": "The element wrapping the slotted items"
+    },
+    {
+      "name": "::part(control)",
+      "description": "The element representing the visual checkbox control"
+    },
+    { "name": "::part(label)", "description": "The label" },
+    {
+      "name": "::part(indicator)",
+      "description": "The element wrapping the indicator slot"
+    },
+    {
+      "name": "::part(label-container)",
+      "description": "The container for the label and required indicator"
+    },
+    { "name": "::part(label)", "description": "The label text element" },
+    {
+      "name": "::part(optional-text)",
+      "description": "The optional text element"
+    },
+    {
+      "name": "::part(instructional-text)",
+      "description": "The instructional text element"
+    },
+    {
+      "name": "::part(root)",
+      "description": "The wrapper div element containing input, loading, clear, and indicator"
+    },
+    {
+      "name": "::part(clear-button)",
+      "description": "The button element used to clear the input"
+    },
+    {
+      "name": "::part(listbox)",
+      "description": "The wrapper for the listbox slotted options"
+    },
+    {
+      "name": "::part(success)",
+      "description": "The wrapper for success validation feedback"
+    },
+    { "name": "::part(success-icon)", "description": "The success icon" },
+    {
+      "name": "::part(error)",
+      "description": "The wrapper for error validation feedback"
+    },
+    { "name": "::part(error-icon)", "description": "The error icon" },
+    {
+      "name": "::part(message)",
+      "description": "The validation message element under success or error"
+    },
+    {
+      "name": "::part(a11y-aria-description)",
+      "description": "The div that contains the additional information"
+    },
+    {
+      "name": "::part(positioning-region)",
+      "description": "A wrapping element used to center the dialog and position the modal overlay"
+    },
+    { "name": "::part(overlay)", "description": "The modal dialog overlay" },
+    { "name": "::part(control)", "description": "The dialog element" },
+    {
+      "name": "::part(positioning-region)",
+      "description": "A wrapping element used to center the dialog and position the modal overlay"
+    },
+    { "name": "::part(overlay)", "description": "The modal dialog overlay" },
+    { "name": "::part(control)", "description": "The dialog element" },
+    { "name": "::part(next)", "description": "Wraps the next flipper content" },
+    {
+      "name": "::part(previous)",
+      "description": "Wraps the previous flipper content"
+    },
+    {
+      "name": "::part(content)",
+      "description": "Wraps the listbox option content"
+    },
+    {
+      "name": "::part(progress)",
+      "description": "Represents the progress element"
+    },
+    {
+      "name": "::part(determinate)",
+      "description": "The determinate indicator"
+    },
+    {
+      "name": "::part(indeterminate)",
+      "description": "The indeterminate indicator"
+    },
+    {
+      "name": "::part(progress)",
+      "description": "Represents the progress element"
+    },
+    {
+      "name": "::part(determinate)",
+      "description": "The determinate indicator"
+    },
+    { "name": "::part(background)", "description": "The background" },
+    {
+      "name": "::part(indeterminate)",
+      "description": "The indeterminate indicator"
+    },
+    {
+      "name": "::part(positioning-region)",
+      "description": "The positioning region for laying out the radios"
+    },
+    { "name": "::part(label)", "description": "The label" },
+    {
+      "name": "::part(control)",
+      "description": "The logical control, the element wrapping the input field, including start and end slots"
+    },
+    {
+      "name": "::part(field)",
+      "description": "The element representing the input field"
+    },
+    {
+      "name": "::part(clear-button)",
+      "description": "The button to clear the input"
+    },
+    {
+      "name": "::part(control)",
+      "description": "The element representing the select invoking element"
+    },
+    {
+      "name": "::part(selected-value)",
+      "description": "The element wrapping the selected value"
+    },
+    {
+      "name": "::part(indicator)",
+      "description": "The element wrapping the visual indicator"
+    },
+    { "name": "::part(listbox)", "description": "The listbox element" },
+    {
+      "name": "::part(positioning-region)",
+      "description": "A wrapping element used to center the dialog and position the modal overlay"
+    },
+    { "name": "::part(overlay)", "description": "The modal dialog overlay" },
+    { "name": "::part(control)", "description": "The dialog element" },
+    { "name": "::part(control)", "description": "The anchor element" },
+    {
+      "name": "::part(content)",
+      "description": "The element wrapping anchor content"
+    },
+    {
+      "name": "::part(positioning-region)",
+      "description": "The region used to position the elements of the slider"
+    },
+    {
+      "name": "::part(track-container)",
+      "description": "The region containing the track elements"
+    },
+    {
+      "name": "::part(track-start)",
+      "description": "The element wrapping the track start slot"
+    },
+    {
+      "name": "::part(thumb-container)",
+      "description": "The thumb container element which is programmatically positioned"
+    },
+    { "name": "::part(label)", "description": "The label element" },
+    { "name": "::part(switch)", "description": "The container for the switch" },
+    {
+      "name": "::part(checked-indicator)",
+      "description": "The checked indicator element"
+    },
+    { "name": "::part(checked)", "description": "The checked icon" },
+    { "name": "::part(unchecked)", "description": "The unchecked icon" },
+    {
+      "name": "::part(tablist)",
+      "description": "The element wrapping for the tabs"
+    },
+    {
+      "name": "::part(root)",
+      "description": "The element wrapping the control"
+    },
+    { "name": "::part(control)", "description": "The textarea element" },
+    { "name": "::part(label)", "description": "The label" },
+    {
+      "name": "::part(control)",
+      "description": "The logical control, the element wrapping the input field, including start and end slots"
+    },
+    { "name": "::part(control)", "description": "The text field element" },
+    {
+      "name": "::part(tablist)",
+      "description": "The element wrapping for the tabs"
+    },
+    {
+      "name": "::part(listitem)",
+      "description": "The wrapping container for the item, represents a semantic listitem"
+    },
+    {
+      "name": "::part(separator)",
+      "description": "The wrapping element for the separator"
+    },
+    { "name": "::part(control)", "description": "The anchor element" },
+    {
+      "name": "::part(content)",
+      "description": "The element wrapping anchor content"
+    },
+    { "name": "::part(label)", "description": "The label" },
+    {
+      "name": "::part(control)",
+      "description": "The logical control, the element wrapping the input field, including start and end slots"
+    },
+    {
+      "name": "::part(input-container)",
+      "description": "The element representing the visual checked or radio indicator"
+    },
+    {
+      "name": "::part(checkbox)",
+      "description": "The element wrapping the `menuitemcheckbox` indicator"
+    },
+    {
+      "name": "::part(radio)",
+      "description": "The element wrapping the `menuitemradio` indicator"
+    },
+    {
+      "name": "::part(content)",
+      "description": "The element wrapping the menu item content"
+    },
+    {
+      "name": "::part(expand-collapse-glyph-container)",
+      "description": "The element wrapping the expand collapse element"
+    },
+    {
+      "name": "::part(expand-collapse)",
+      "description": "The expand/collapse element"
+    },
+    {
+      "name": "::part(submenu-region)",
+      "description": "The container for the submenu, used for positioning"
+    },
+    {
+      "name": "::part(control)",
+      "description": "The element representing the visual radio control"
+    },
+    { "name": "::part(label)", "description": "The label" },
+    {
+      "name": "::part(container)",
+      "description": "The element wrapping the label mark and content"
+    },
+    {
+      "name": "::part(mark)",
+      "description": "The element wrapping the label mark"
+    },
+    {
+      "name": "::part(content)",
+      "description": "The element wrapping the label content"
+    },
+    {
+      "name": "::part(positioning-region)",
+      "description": "The element used to position the tree item content with exception of any child nodes"
+    },
+    {
+      "name": "::part(content-region)",
+      "description": "The element containing the expand/collapse, start, and end slots"
+    },
+    {
+      "name": "::part(items)",
+      "description": "The element wrapping any child items"
+    },
+    {
+      "name": "::part(expand-collapse-button)",
+      "description": "The expand/collapse button"
+    }
+  ]
+}

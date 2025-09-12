@@ -1,0 +1,44 @@
+@use 'sass:map';
+
+// Mixin to declare CSS custom properties (Variables)
+@mixin setup-z-index($scope: ':root', $map: ()) {
+	// z-index map for components and in component use.
+	$z-index-map: (
+		'deep-dive': -9999,
+		// hide
+		'z-index-auto': auto,
+		'default': 1,
+		'hover': 2,
+		'active': 3,
+		'focus': 4,
+		'dropdown': 1000,
+		// listbox, menu, menu-item, select, combobox, flyout,
+		'sticky': 1100,
+		'fixed': 1200,
+		// product-header, back-to-top
+		'backdrop-side-nav': 1300,
+		'side-nav': 800,
+		'footer': 900,
+		// footer below dropdown
+		'overlay': 1500,
+		// dialog, drawer
+		'dialog': 1800,
+		// dialog, drawer
+		'tooltip': 1900,
+		'tooltip-focus': 1899,
+		'loader-progress-ring': 2000,
+		'alert-toast': 2100,
+	);
+
+	@if $map {
+		$z-index-map: map.deep-merge($z-index-map, $map);
+	}
+
+	#{$scope},
+	#{if($scope != ':root', $scope, '')}::before,
+	#{if($scope != ':root', $scope, '')}::after {
+		@each $key, $value in $z-index-map {
+			--saf-z-index-#{$key}: #{$value};
+		}
+	}
+}

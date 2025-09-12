@@ -1,0 +1,143 @@
+@use 'sass:string';
+
+/* Math Conditional mixin
+* @param {property} $property - The css property to apply the values to
+* @param {css-variable} $conditional - The css variable to apply the conditional to
+* @param {css-variable} $default - The default value
+* @param {css-variable} $variant-1 - The first variant value
+* @param {css-variable} $variant-2 - The second variant value
+* Note: This is primarily a workaround for Firefox as it does not support container-type: style for container style queries
+* For Chrome/Edge/Safari, use the below method
+* @example
+	@supports (container-type: style) {
+		@container style($conditional: default) {
+			:host .control {
+				$property: $default;
+			}
+		}
+		@container style($conditional: variant) {
+			:host .control {
+				$property: $variant;
+			}
+		}
+	}
+* For Firefox, use the below method
+* @example
+	@supports not (container-type: style) {
+		:host([conditional='inherit']) {
+			$comp-conditional: 0 + $conditional;
+		}
+		:host([conditional='default']) {
+			$comp-conditional: 0;
+		}
+		:host([conditional='variant']) {
+			$compt-conditional: 1;
+		}
+		:host .control {
+			@include math-conditional($property, $comp-conditional, $default, $variant-1);
+		}
+	}
+*/
+/* stylelint-disable max-nesting-depth */
+@mixin attribute-conditional($property, $conditional, $default, $variant-1, $variant-2: null) {
+	// Make sure a default value is set
+	@if not $default {
+		@error 'A default value is required.';
+	} @else {
+		@if type-of($default) == 'string' {
+			$is-list: string.split($default, ' ');
+
+			@if length($is-list) > 1 {
+				@error 'Must pass only a single value for the default, multiple values breaks the calc() function.';
+			}
+		}
+	}
+
+	// Make sure a variant value is set
+	@if not $variant-1 {
+		@error 'A variant value is required.';
+	} @else {
+		@if type-of($variant-1) == 'string' {
+			$is-list: string.split($variant-1, ' ');
+
+			@if length($is-list) > 1 {
+				@error 'Must pass only a single value for the first variant, multiple values breaks the calc() function.';
+			}
+		}
+	}
+
+	@if $variant-2 and type-of($variant-2) == 'string' {
+		// If variant-2 is set (optional), make sure it is a single value
+		$is-list: string.split($variant-2, ' ');
+
+		@if length($is-list) > 1 {
+			@error 'Must pass only a single value for the second variant, multiple values breaks the calc() function.';
+		}
+	}
+
+	// Make sure a css property is defined
+	@if not $property {
+		@error 'A css property is required.';
+	}
+	@if not $conditional {
+		@error 'A css variable is required.';
+	}
+	@if $variant-2 {
+		// If a second variant is set, use a 3 way conditional
+
+		/* if $conditional = 0, $default = 1, $variant-1 = 0, $variant-2 = 0 */
+
+		/* if $conditional = 1, $default = 0, $variant-1 = 1, $variant-2 = 0 */
+
+		/* if $conditional = 2, $default = 0, $variant-1 = 0, $variant-2 = 1 */
+		#{$property}: calc(
+			($default * ((1 - $conditional) * (2 - $conditional) * 0.5)) +
+				($variant-1 * ($conditional * (2 - $conditional))) +
+				($variant-2 * ($conditional * (1 - $conditional)) * -0.5)
+		);
+	} @else {
+		// If no second variant, use a 2 way conditional
+		#{$property}: calc(
+			($default * ((1 - $conditional) * (2 - $conditional) * 0.5)) +
+				($variant-1 * ($conditional * (2 - $conditional)))
+		);
+	}
+}
+/* stylelint-enable max-nesting-depth */
+
+/* Define conditionals mixin
+* @param {string} $attribute - The html property that controls the variant
+* @param {string} $variable - The css variable WITHOUT the -- prefix to control the conditionals
+* @param {css-variable} $default - The default value
+* @param {css-variable} $variant-1 - The first variant value
+* @param {css-variable} $variant-2 - The second variant value
+* @todo - rename to attribute-conditionals
+*/
+@mixin define-conditionals($attribute, $variable, $default, $variant-1, $variant-2: '') {
+	@if not $attribute {
+		@error 'An attribute is required.';
+	}
+	@if not $variable {
+		@error 'A variable is required.';
+	}
+	@if not $default {
+		@error 'A default value is required.';
+	}
+	@if not $variant-1 {
+		@error 'A variant value is required.';
+	}
+
+	:host([#{$attribute}='#{$default}']) {
+		--#{$variable}: 0;
+	}
+
+	:host([#{$attribute}='#{$variant-1}']) {
+		--#{$variable}: 1;
+	}
+
+	@if $variant-2 {
+		:host([#{$attribute}='#{$variant-2}']) {
+			--#{$variable}: 2;
+		}
+	}
+}

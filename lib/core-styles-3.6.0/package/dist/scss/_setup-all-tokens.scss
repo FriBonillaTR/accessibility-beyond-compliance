@@ -1,0 +1,14 @@
+@use 'sass:string';
+@forward './setup-tokens' as saf-*;
+@forward './z-index' as saf-*;
+@forward './density.scss' as saf-*;
+
+@use './setup-tokens' as saf-tokens;
+@use './z-index' as saf-z-index;
+@use './density.scss' as saf-density;
+
+@mixin setup-all-tokens($scope: 'root') {
+	@include saf-tokens.setup-tokens([], #{$scope});
+	@include saf-z-index.setup-z-index(#{$scope});
+	@include saf-density.setup-density(#{$scope});
+}

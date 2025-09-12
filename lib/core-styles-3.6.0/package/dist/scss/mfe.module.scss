@@ -1,0 +1,30 @@
+/* The CSS-only approach for MFE's using css-modules 
+* Note: Intended to be paired with the @saffron/core-styles/dist/mfe-globals.css file
+* as it provides the Saffron global styles such as normalize, typography, fonts, and font-awesome
+*
+* How it works
+* The compose method from css modules references the styling from a class from another module
+* the .selector will gain the styling from .saffron-wrapper defined in the saffron module
+* providing the design tokens, z-index, and density tokens
+
+* CSS module setup (app.module.css)
+.selector {
+  compose: saffron-scope from '../node_modules/@saffron/core-styles/dist/mfe.module';
+}
+
+* Typescript setup (app.tsx)
+import styles from '@saffron/core-styles/dist/mfe.module.css';
+
+* HTML requirements (app.tsx)
+<div className={styles.selector}>
+  <!-- Application markup -->
+</div>
+*/
+
+// No need to forward as consumers will use the compiled version
+@use './setup-all-tokens' as saf-tokens;
+
+/* Token-setup scopes the design-tokens, z-index, and density tokens to the provided selector
+* This selector then becomes accessible by the css modules compose method for css modules support
+*/
+@include saf-tokens.setup-all-tokens('.saffron-scope');

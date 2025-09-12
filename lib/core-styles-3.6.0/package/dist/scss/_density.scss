@@ -1,0 +1,9 @@
+// Mixin to declare CSS custom properties (Variables)
+@mixin setup-density($scope: ':root') {
+	/* Define the density css-varaible and set it's default - standard | 0 */
+	#{$scope},
+	#{if($scope != ':root', $scope, '')}::before,
+	#{if($scope != ':root', $scope, '')}::after {
+		--saf-density: 0;
+	}
+}

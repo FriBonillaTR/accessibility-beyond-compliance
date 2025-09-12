@@ -1,0 +1,377 @@
+{
+	"name": "@saffron/core-components",
+	"version": "3.10.0",
+	"description": "Saffron Design System based on FAST from fast.design",
+	"author": "Thomson Reuters - Saffron Design System Team",
+	"license": "SEE LICENSE IN LICENSE",
+	"type": "module",
+	"sideEffects": false,
+	"publishConfig": {
+		"registry": "https://tr1.jfrog.io/artifactory/api/npm/npm/"
+	},
+	"files": [
+		"dist"
+	],
+	"repository": {
+		"url": "https://github.com/tr/saffron_design_system/tree/main/core-packages/core-components"
+	},
+	"homepage": "https://saffron.int.thomsonreuters.com/storybook-preview",
+	"bugs": {
+		"url": "https://dev.azure.com/tr-shared/Saffron%20Design%20System/_workitems/"
+	},
+	"keywords": [
+		"Saffron",
+		"Web Components",
+		"FAST"
+	],
+	"engines": {
+		"node": ">= 16.13.0"
+	},
+	"main": "dist/esm/index.js",
+	"types": "dist/esm/dts/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/esm/dts/index.d.ts",
+			"default": "./dist/esm/index.js"
+		},
+		"./fast-element": {
+			"types": "./dist/esm/dts/@microsoft/fast-element/index.d.ts",
+			"import": "./dist/esm/@microsoft/fast-element/dist/esm/index.js",
+			"default": "./dist/esm/@microsoft/fast-element/dist/esm/index.js"
+		},
+		"./fast-element/utilities": {
+			"types": "./dist/esm/dts/@microsoft/fast-element/utilities.d.ts",
+			"import": "./dist/esm/@microsoft/fast-element/dist/esm/utilities.js",
+			"default": "./dist/esm/@microsoft/fast-element/dist/esm/utilities.js"
+		},
+		"./umd": {
+			"types": "./dist/umd/saffron.d.ts",
+			"import": "./dist/umd/saffron.js",
+			"default": "./dist/umd/saffron.js"
+		},
+		"./umd-react": {
+			"types": "./dist/umd/saffron.react.d.ts",
+			"import": "./dist/umd/saffron.react.js",
+			"default": "./dist/umd/saffron.react.js"
+		},
+		"./package.json": "./package.json",
+		"./react": {
+			"types": "./dist/esm/dts/react-components/index.d.ts",
+			"import": "./dist/esm/react-components/index.js",
+			"default": "./dist/esm/react-components/index.js"
+		},
+		"./saf-alert.js": {
+			"import": "./dist/cdn/bundle/saf-alert.js",
+			"default": "./dist/cdn/bundle/saf-alert.js"
+		},
+		"./saf-accordion.js": {
+			"import": "./dist/cdn/bundle/saf-accordion.js",
+			"default": "./dist/cdn/bundle/saf-accordion.js"
+		},
+		"./saf-accordion-item.js": {
+			"import": "./dist/cdn/bundle/saf-accordion-item.js",
+			"default": "./dist/cdn/bundle/saf-accordion-item.js"
+		},
+		"./saf-anchor.js": {
+			"import": "./dist/cdn/bundle/saf-anchor.js",
+			"default": "./dist/cdn/bundle/saf-anchor.js"
+		},
+		"./saf-avatar.js": {
+			"import": "./dist/cdn/bundle/saf-avatar.js",
+			"default": "./dist/cdn/bundle/saf-avatar.js"
+		},
+		"./saf-badge.js": {
+			"import": "./dist/cdn/bundle/saf-badge.js",
+			"default": "./dist/cdn/bundle/saf-badge.js"
+		},
+		"./saf-breadcrumb-item.js": {
+			"import": "./dist/cdn/bundle/saf-breadcrumb-item.js",
+			"default": "./dist/cdn/bundle/saf-breadcrumb-item.js"
+		},
+		"./saf-breadcrumb.js": {
+			"import": "./dist/cdn/bundle/saf-breadcrumb.js",
+			"default": "./dist/cdn/bundle/saf-breadcrumb.js"
+		},
+		"./saf-button-group.js": {
+			"import": "./dist/cdn/bundle/saf-button-group.js",
+			"default": "./dist/cdn/bundle/saf-button-group.js"
+		},
+		"./saf-button.js": {
+			"import": "./dist/cdn/bundle/saf-button.js",
+			"default": "./dist/cdn/bundle/saf-button.js"
+		},
+		"./saf-card.js": {
+			"import": "./dist/cdn/bundle/saf-card.js",
+			"default": "./dist/cdn/bundle/saf-card.js"
+		},
+		"./saf-checkbox-group.js": {
+			"import": "./dist/cdn/bundle/saf-checkbox-group.js",
+			"default": "./dist/cdn/bundle/saf-checkbox-group.js"
+		},
+		"./saf-checkbox.js": {
+			"import": "./dist/cdn/bundle/saf-checkbox.js",
+			"default": "./dist/cdn/bundle/saf-checkbox.js"
+		},
+		"./saf-date-picker.js": {
+			"import": "./dist/cdn/bundle/saf-date-picker.js",
+			"default": "./dist/cdn/bundle/saf-date-picker.js"
+		},
+		"./saf-data-grid-cell.js": {
+			"import": "./dist/cdn/bundle/saf-data-grid-cell.js",
+			"default": "./dist/cdn/bundle/saf-data-grid-cell.js"
+		},
+		"./saf-data-grid-row.js": {
+			"import": "./dist/cdn/bundle/saf-data-grid-row.js",
+			"default": "./dist/cdn/bundle/saf-data-grid-row.js"
+		},
+		"./saf-data-grid.js": {
+			"import": "./dist/cdn/bundle/saf-data-grid.js",
+			"default": "./dist/cdn/bundle/saf-data-grid.js"
+		},
+		"./saf-dialog.js": {
+			"import": "./dist/cdn/bundle/saf-dialog.js",
+			"default": "./dist/cdn/bundle/saf-dialog.js"
+		},
+		"./saf-divider.js": {
+			"import": "./dist/cdn/bundle/saf-divider.js",
+			"default": "./dist/cdn/bundle/saf-divider.js"
+		},
+		"./saf-file-upload.js": {
+			"import": "./dist/cdn/bundle/saf-file-upload.js",
+			"default": "./dist/cdn/bundle/saf-file-upload.js"
+		},
+		"./saf-icon.js": {
+			"import": "./dist/cdn/bundle/saf-icon.js",
+			"default": "./dist/cdn/bundle/saf-icon.js"
+		},
+		"./saf-option.js": {
+			"import": "./dist/cdn/bundle/saf-option.js",
+			"default": "./dist/cdn/bundle/saf-option.js"
+		},
+		"./saf-logo.js": {
+			"import": "./dist/cdn/bundle/saf-logo.js",
+			"default": "./dist/cdn/bundle/saf-logo.js"
+		},
+		"./saf-menu-item.js": {
+			"import": "./dist/cdn/bundle/saf-menu-item.js",
+			"default": "./dist/cdn/bundle/saf-menu-item.js"
+		},
+		"./saf-menu.js": {
+			"import": "./dist/cdn/bundle/saf-menu.js",
+			"default": "./dist/cdn/bundle/saf-menu.js"
+		},
+		"./saf-pagination.js": {
+			"import": "./dist/cdn/bundle/saf-pagination.js",
+			"default": "./dist/cdn/bundle/saf-pagination.js"
+		},
+		"./saf-product-header-actions.js": {
+			"import": "./dist/cdn/bundle/saf-product-header-actions.js",
+			"default": "./dist/cdn/bundle/saf-product-header-actions.js"
+		},
+		"./saf-product-header-settings.js": {
+			"import": "./dist/cdn/bundle/saf-product-header-settings.js",
+			"default": "./dist/cdn/bundle/saf-product-header-settings.js"
+		},
+		"./saf-product-header.js": {
+			"import": "./dist/cdn/bundle/saf-product-header.js",
+			"default": "./dist/cdn/bundle/saf-product-header.js"
+		},
+		"./saf-progress-ring.js": {
+			"import": "./dist/cdn/bundle/saf-progress-ring.js",
+			"default": "./dist/cdn/bundle/saf-progress-ring.js"
+		},
+		"./saf-progress.js": {
+			"import": "./dist/cdn/bundle/saf-progress.js",
+			"default": "./dist/cdn/bundle/saf-progress.js"
+		},
+		"./saf-radio-group.js": {
+			"import": "./dist/cdn/bundle/saf-radio-group.js",
+			"default": "./dist/cdn/bundle/saf-radio-group.js"
+		},
+		"./saf-radio.js": {
+			"import": "./dist/cdn/bundle/saf-radio.js",
+			"default": "./dist/cdn/bundle/saf-radio.js"
+		},
+		"./saf-select.js": {
+			"import": "./dist/cdn/bundle/saf-select.js",
+			"default": "./dist/cdn/bundle/saf-select.js"
+		},
+		"./saf-side-nav.js": {
+			"import": "./dist/cdn/bundle/saf-side-nav.js",
+			"default": "./dist/cdn/bundle/saf-side-nav.js"
+		},
+		"./saf-status.js": {
+			"import": "./dist/cdn/bundle/saf-status.js",
+			"default": "./dist/cdn/bundle/saf-status.js"
+		},
+		"./saf-step.js": {
+			"import": "./dist/cdn/bundle/saf-step.js",
+			"default": "./dist/cdn/bundle/saf-step.js"
+		},
+		"./saf-stepper.js": {
+			"import": "./dist/cdn/bundle/saf-stepper.js",
+			"default": "./dist/cdn/bundle/saf-stepper.js"
+		},
+		"./saf-switch.js": {
+			"import": "./dist/cdn/bundle/saf-switch.js",
+			"default": "./dist/cdn/bundle/saf-switch.js"
+		},
+		"./saf-tab-panel.js": {
+			"import": "./dist/cdn/bundle/saf-tab-panel.js",
+			"default": "./dist/cdn/bundle/saf-tab-panel.js"
+		},
+		"./saf-tab.js": {
+			"import": "./dist/cdn/bundle/saf-tab.js",
+			"default": "./dist/cdn/bundle/saf-tab.js"
+		},
+		"./saf-tabs.js": {
+			"import": "./dist/cdn/bundle/saf-tabs.js",
+			"default": "./dist/cdn/bundle/saf-tabs.js"
+		},
+		"./saf-text-area.js": {
+			"import": "./dist/cdn/bundle/saf-text-area.js",
+			"default": "./dist/cdn/bundle/saf-text-area.js"
+		},
+		"./saf-text-field.js": {
+			"import": "./dist/cdn/bundle/saf-text-field.js",
+			"default": "./dist/cdn/bundle/saf-text-field.js"
+		},
+		"./saf-tooltip.js": {
+			"import": "./dist/cdn/bundle/saf-tooltip.js",
+			"default": "./dist/cdn/bundle/saf-tooltip.js"
+		},
+		"./saf-tree-item.js": {
+			"import": "./dist/cdn/bundle/saf-tree-item.js",
+			"default": "./dist/cdn/bundle/saf-tree-item.js"
+		},
+		"./saf-tree-view.js": {
+			"import": "./dist/cdn/bundle/saf-tree-view.js",
+			"default": "./dist/cdn/bundle/saf-tree-view.js"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"react": [
+				"./dist/esm/dts/react-components/index.d.ts"
+			],
+			"fast-element": [
+				"./dist/esm/dts/@microsoft/fast-element/index.d.ts"
+			],
+			"fast-element/utilities": [
+				"./dist/esm/dts/@microsoft/fast-element/utilities.d.ts"
+			],
+			"umd": [
+				"./dist/umd/saffron.d.ts"
+			],
+			"umd-react": [
+				"./dist/umd/saffron.react.d.ts"
+			]
+		}
+	},
+	"scripts": {
+		"comment1": "---------- start dev server ----------",
+		"copy:build-and-css": "node ./scripts/copy-build-and-css-to-static.js",
+		"serve": "serve src/static",
+		"watch:rollup": "rollup -c ./rollup/rollup.config.esm.js -w",
+		"start": "yarn watch:rollup & yarn copy:build-and-css & yarn serve",
+		"comment2": "---------- build ----------",
+		"build:rollup:esm": "cross-env NODE_OPTIONS='--no-warnings=ExperimentalWarning' rollup -c ./rollup/rollup.config.esm.js",
+		"build:rollup:cjs-umd-es5": "cross-env NODE_OPTIONS='--no-warnings=ExperimentalWarning' rollup -c ./rollup/rollup.config.js",
+		"build-externals": "node ./rollup/copy-bundled-deps-dist.js",
+		"gen-manifest": "npx cem analyze",
+		"build": "npx rimraf ./dist && yarn run build:rollup:esm && yarn build-externals && yarn run build:rollup:cjs-umd-es5 && yarn gen-manifest",
+		"build:dev": "npx rimraf ./dist && yarn run build:rollup:esm && yarn build-externals && yarn gen-manifest",
+		"local-pack": "yarn build:dev && yarn pack",
+		"comment3": "---------- storybook ----------",
+		"build-storybook:scss": "sass --style compressed --load-path=node_modules --no-source-map styles/index.scss:styles/index.css",
+		"start:storybook": "yarn run build-storybook:scss && storybook dev -p 3000 -h localhost",
+		"build-storybook": "yarn storybook build",
+		"build:storybook": "yarn run build-storybook:scss && yarn run build-storybook",
+		"comment-parser": "npx --yes tsx ./.storybook/boot-scripts/commentParser.ts",
+		"comment4": "---------- other ----------",
+		"test": "yarn build:storybook && NODE_NO_WARNINGS=1 npx playwright install && playwright test",
+		"generate-allure-report": "npx allure generate allure-results --clean",
+		"modify-base-url-allure-report": "node ./scripts/modify-base-url-allure-report.js",
+		"lint:ts": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@floating-ui/dom": "1.5.4",
+		"@microsoft/fast-web-utilities": "6.0.0",
+		"@saffron/config": "1.1.11",
+		"@saffron/core-styles": "3.6.0",
+		"@saffron/date-fns": "4.1.3",
+		"tabbable": "6.2.0",
+		"tslib": "2.6.3"
+	},
+	"devDependencies": {
+		"@babel/core": "~7.23.7",
+		"@babel/plugin-proposal-class-properties": "~7.18.6",
+		"@babel/plugin-proposal-object-rest-spread": "~7.20.7",
+		"@babel/plugin-transform-arrow-functions": "~7.23.3",
+		"@babel/preset-env": "~7.26.0",
+		"@babel/preset-react": "~7.23.3",
+		"@custom-elements-manifest/analyzer": "~0.10.4",
+		"@dnd-kit/core": "~6.1.0",
+		"@dnd-kit/sortable": "~8.0.0",
+		"@dnd-kit/utilities": "~3.2.2",
+		"@grapecity/wijmo.react.all": "~5.20242.30",
+		"@microsoft/fast-element": "2.0.0-beta.26",
+		"@microsoft/fast-react-wrapper": "1.0.0-alpha.27",
+		"@playwright/test": "~1.51.1",
+		"@rollup/plugin-babel": "~6.0.4",
+		"@rollup/plugin-commonjs": "~25.0.7",
+		"@rollup/plugin-node-resolve": "~15.2.3",
+		"@rollup/plugin-terser": "~0.4.4",
+		"@rollup/plugin-typescript": "~11.1.6",
+		"@storybook/addon-a11y": "~7.6.20",
+		"@storybook/addon-actions": "~7.6.20",
+		"@storybook/addon-designs": "~7.0.9",
+		"@storybook/addon-docs": "~7.6.20",
+		"@storybook/addon-essentials": "~7.6.20",
+		"@storybook/addon-interactions": "~7.6.20",
+		"@storybook/addon-links": "~7.6.20",
+		"@storybook/addon-storysource": "~7.6.20",
+		"@storybook/addons": "~7.6.20",
+		"@storybook/cli": "~7.6.20",
+		"@storybook/client-api": "~7.6.20",
+		"@storybook/components": "~7.6.20",
+		"@storybook/csf": "~0.1.2",
+		"@storybook/html": "~7.6.20",
+		"@storybook/html-vite": "~7.6.20",
+		"@storybook/theming": "~7.6.20",
+		"@types/braces": "~3",
+		"@types/express": "~5.0.3",
+		"@types/lodash.clonedeep": "~4.5.9",
+		"@types/lodash.memoize": "~4",
+		"@types/lodash.merge": "~4",
+		"@types/ncp": "~2.0.8",
+		"@types/react": "~18.2.48",
+		"allure-commandline": "~2.26.0",
+		"allure-playwright": "~2.11.1",
+		"body-parser": "~1.20.3",
+		"braces": "~3.0.3",
+		"clipboard": "~2.0.11",
+		"cross-env": "~7.0.3",
+		"custom-element-vs-code-integration": "~1.2.3",
+		"express": "~5.1.0",
+		"lodash.clonedeep": "~4.5.0",
+		"lodash.memoize": "~4.1.2",
+		"lodash.merge": "~4.6.2",
+		"maketypes": "^1.1.2",
+		"ncp": "~2.0.0",
+		"qs": "~6.11.2",
+		"react": "~18.2.0",
+		"react-dom": "~18.2.0",
+		"react-syntax-highlighter": "~15.6.1",
+		"rollup": "~4.44.0",
+		"rollup-plugin-dts": "~5.3.1",
+		"sass": "~1.70.0",
+		"sass-loader": "~13.3.2",
+		"serve": "~14.2.4",
+		"storybook": "~7.6.20",
+		"storybook-multilevel-sort": "~2.0.0",
+		"vite": "~6.3.5",
+		"vite-plugin-turbosnap": "~1.0.3"
+	},
+	"customElements": "dist/custom-elements.json"
+}

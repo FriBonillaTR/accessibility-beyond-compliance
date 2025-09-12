@@ -1,0 +1,46 @@
+{
+	"name": "@saffron/config",
+	"version": "1.1.11",
+	"author": "Thomson Reuters - Saffron Design System Team",
+	"contributors": [
+		"Ahmed Habeila <ahmed.habeila@thomsonreuters.com>"
+	],
+	"license": "MIT",
+	"description": "Saffron components configuration package",
+	"repository": {
+		"url": "https://github.com/tr/saffron_design_system/tree/main/core-packages/config"
+	},
+	"publishConfig": {
+		"registry": "https://tr1.jfrog.io/artifactory/api/npm/npm/"
+	},
+	"sideEffects": false,
+	"browser": "dist/index",
+	"type": "module",
+	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			".": [
+				"dist/index.d.ts"
+			]
+		}
+	},
+	"scripts": {
+		"build": "npx rimraf dist && npx tsc",
+		"publish": "yarn build && npm publish"
+	},
+	"devDependencies": {
+		"rimraf": "~6.0.1",
+		"typescript": "~5.8.3"
+	}
+}

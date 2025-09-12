@@ -17,8 +17,7 @@
     "check-build": "npm run build && npm run serve"
   },
   "dependencies": {
-    "@saffron/core-components": "^3.10.0",
-    "@saffron/core-styles": "^3.6.0",
+    "@microsoft/fast-web-utilities": "^6.0.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "lucide-react": "0.544.0",
@@ -26,8 +25,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "reveal.js": "^5.2.1",
-    "tailwind-merge": "3.3.1",
-    "tailwindcss-animate": "1.0.7"
+    "tabbable": "^6.2.0"
   },
   "devDependencies": {
     "@types/node": "^24.3.1",
@@ -41,7 +39,6 @@
     "postcss": "^8.5.6",
     "sass": "^1.92.1",
     "serve": "^14.2.5",
-    "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
   },
   "repository": {

@@ -1,0 +1,25 @@
+/* Global MFE stylesheet for @saffron/core-components library
+* Provides Saffron global styles such as normalize, typography, fonts, and fon-awesome
+* Intended to be used in pair with the @saffron/core-styles/dist/mfe.module.css file providing scoped tokens
+*/
+
+/* Forward token-setup mixin providing 
+* consumers with the tools to scope tokens via scss if needed
+*
+* How consumers would use:
+* Example class scope using .scope-selector
+
+* Import the mfe-globals scss file with saf-globals namespace
+@use '../node_modules/@saffron/core-styles/dist/scss/mfe-globals.scss' as saf-globals;
+
+* Call the mixins via @include referencing the saf-globals namespace to access the forwarded token-setup mixin
+* This mixin scopes the design tokens, z-index, and density tokens to the provided selector
+@include saf-globals.saf-setup-all-tokens('.scope-selector');
+*/
+@forward './setup-all-tokens' as saf-*;
+
+@use './normalize/global-elements.scss';
+@use './normalize/global-hidden.scss';
+@use './normalize/global-text-level.scss';
+@use './fonts.scss';
+@use './typography.scss';
