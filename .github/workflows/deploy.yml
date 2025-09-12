@@ -29,8 +29,10 @@ jobs:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Clear npm cache
-        run: npm cache clean --force
+      - name: Clear npm cache and remove pnpm lockfile
+        run: |
+          npm cache clean --force
+          rm -f pnpm-lock.yaml
 
       - name: Install dependencies (public packages only)
         run: |
