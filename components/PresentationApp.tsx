@@ -3,12 +3,27 @@
 import type React from "react";
 
 import { useEffect, useRef, useState } from "react";
+import TitleSlide from "./slides/TitleSlide";
+import IntroSlide1 from "./slides/IntroSlide1";
+import IntroSlide2 from "./slides/IntroSlide2";
+import LimitsOfComplianceSlide from "./slides/LimitsOfComplianceSlide";
+import A11yMeetsIdentitySlide1 from "./slides/A11yMeetsIdentitySlide1";
+import A11yMeetsIdentitySlide2 from "./slides/A11yMeetsIdentitySlide2";
+import A11yMeetsIdentitySlide3 from "./slides/A11yMeetsIdentitySlide3";
+import A11yMeetsIdentitySlide4 from "./slides/A11yMeetsIdentitySlide4";
+import A11yMeetsIdentitySlide5 from "./slides/A11yMeetsIdentitySlide5";
+import A11yMeetsIdentitySlide6 from "./slides/A11yMeetsIdentitySlide6";
+import DesigningWithIntentionSlide from "./slides/DesigningWithIntentionSlide";
+import ConclusionSlide1 from "./slides/ConclusionSlide1";
+import ConclusionSlide2 from "./slides/ConclusionSlide2";
+import ConclusionSlide3 from "./slides/ConclusionSlide3";
+import { SafButton, SafDialog, SafIcon } from "@saffron/core-components/react";
 
 export default function PresentationApp() {
   const deckRef = useRef<HTMLDivElement>(null);
   const deckInstanceRef = useRef<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [totalSlides, setTotalSlides] = useState(6);
+  const [totalSlides, setTotalSlides] = useState(14); // Update this if slides are added/removed
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +46,9 @@ export default function PresentationApp() {
         setIsLoading(true);
 
         const { default: Reveal } = await import("reveal.js");
-        console.log("[v0] Reveal.js imported successfully");
+        const RevealNotes = (await import("reveal.js/plugin/notes/notes.js"))
+          .default;
+        console.log("[v0] Reveal.js and Notes plugin imported successfully");
 
         console.log("[v0] Checking deckRef.current:", deckRef.current);
 
@@ -88,13 +105,13 @@ export default function PresentationApp() {
             loop: false,
             transition: animationsEnabled ? "slide" : "none",
             transitionSpeed: animationsEnabled ? "default" : 0,
-            controls: true,
+            controls: false,
             progress: true,
             center: true,
             viewDistance: 3,
             mobileViewDistance: 2,
             theme: null,
-            plugins: [],
+            plugins: [RevealNotes],
           });
 
           console.log("[v0] Reveal.js deck created, initializing...");
@@ -260,60 +277,21 @@ export default function PresentationApp() {
         aria-label="Accessibility Beyond Compliance Presentation"
         style={{ display: isLoading || error ? "none" : "block" }}
       >
-        <div className="slides" role="main">
-          <section>
-            <h1>Accessibility Beyond Compliance</h1>
-            <p>A mindset, not a checklist</p>
-            <p className="author">Thomson Reuters Presentation</p>
-          </section>
-
-          <section>
-            <h2>Overview</h2>
-            <ul>
-              <li>The Limits of Compliance</li>
-              <li>Where Accessibility Meets Identity</li>
-              <li>Designing with Intention</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2>The Limits of Compliance</h2>
-            <p>Compliance is the floor, not the ceiling</p>
-            <ul>
-              <li>WCAG guidelines are minimum standards</li>
-              <li>Real accessibility requires understanding user needs</li>
-              <li>Context matters more than checkboxes</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2>Where Accessibility Meets Identity</h2>
-            <p>Inclusive design reflects who we are</p>
-            <ul>
-              <li>Accessibility as a core value</li>
-              <li>Building empathy into our process</li>
-              <li>Creating experiences for everyone</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2>Designing with Intention</h2>
-            <p>Every decision impacts accessibility</p>
-            <ul>
-              <li>Consider accessibility from the start</li>
-              <li>Test with real users</li>
-              <li>Iterate based on feedback</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2>Conclusion</h2>
-            <p>
-              Accessibility is not just about compliance—it's about creating
-              inclusive experiences that work for everyone.
-            </p>
-            <p>Thank you</p>
-          </section>
+        <div className="slides" role="main" id="main-content">
+          <TitleSlide />
+          <IntroSlide1 />
+          <IntroSlide2 />
+          <LimitsOfComplianceSlide />
+          <A11yMeetsIdentitySlide1 />
+          <A11yMeetsIdentitySlide2 />
+          <A11yMeetsIdentitySlide3 />
+          <A11yMeetsIdentitySlide4 />
+          <A11yMeetsIdentitySlide5 />
+          <A11yMeetsIdentitySlide6 />
+          <DesigningWithIntentionSlide />
+          <ConclusionSlide1 />
+          <ConclusionSlide2 />
+          <ConclusionSlide3 />
         </div>
       </div>
 
@@ -345,18 +323,22 @@ export default function PresentationApp() {
               role="navigation"
               aria-label="Presentation navigation"
             >
-              <button
-                className="info-button"
+              <SafButton
+                a11y-aria-label="Info Button"
+                shape="circle"
+                icon-only
                 onClick={handleButtonClick(() => setShowInfo(!showInfo))}
                 onKeyDown={handleButtonKeyDown(() => setShowInfo(!showInfo))}
-                aria-label="Show presentation information and keyboard shortcuts"
                 aria-expanded={showInfo}
                 title="Press for presentation info and keyboard shortcuts"
                 tabIndex={0}
               >
-                <span className="sr-only">Information</span>
-                <span aria-hidden="true">ℹ</span>
-              </button>
+                <SafIcon
+                  icon-name="plus"
+                  appearance="solid"
+                  presentation
+                ></SafIcon>
+              </SafButton>
 
               <div
                 className="slide-counter"
@@ -368,186 +350,229 @@ export default function PresentationApp() {
               </div>
 
               <div className="nav-controls">
-                <button
+                <SafButton
+                  a11y-aria-label="Go to first slide (Up arrow or Home key)"
+                  shape="circle"
+                  icon-only
                   onClick={handleButtonClick(goToFirstSlide)}
                   onKeyDown={handleButtonKeyDown(goToFirstSlide)}
-                  aria-label="Go to first slide (Up arrow or Home key)"
-                  className="nav-button first-button"
                   title="First slide (↑ or Home)"
                   tabIndex={0}
                 >
-                  <span aria-hidden="true">⇈</span>
+                  <SafIcon
+                    icon-name="backward-fast"
+                    appearance="solid"
+                    presentation
+                  />
                   <span className="sr-only">First</span>
-                </button>
+                </SafButton>
 
-                <button
+                <SafButton
+                  a11y-aria-label="Go to previous slide (Left arrow key)"
+                  shape="circle"
+                  icon-only
                   onClick={handleButtonClick(prevSlide)}
                   onKeyDown={handleButtonKeyDown(prevSlide)}
-                  disabled={currentSlide === 0}
-                  aria-label="Go to previous slide (Left arrow key)"
-                  className="nav-button prev-button"
                   title="Previous slide (←)"
                   tabIndex={0}
+                  disabled={currentSlide === 0}
                 >
-                  <span aria-hidden="true">‹</span>
+                  <SafIcon
+                    icon-name="arrow-left"
+                    appearance="solid"
+                    presentation
+                  />
                   <span className="sr-only">Previous</span>
-                </button>
+                </SafButton>
 
-                <button
+                <SafButton
+                  a11y-aria-label="Go to next slide (Right arrow, Space, or Enter key)"
+                  shape="circle"
+                  icon-only
                   onClick={handleButtonClick(nextSlide)}
                   onKeyDown={handleButtonKeyDown(nextSlide)}
-                  disabled={currentSlide === totalSlides - 1}
-                  aria-label="Go to next slide (Right arrow, Space, or Enter key)"
-                  className="nav-button next-button"
                   title="Next slide (→, Space, or Enter)"
                   tabIndex={0}
+                  disabled={currentSlide === totalSlides - 1}
                 >
-                  <span aria-hidden="true">›</span>
+                  <SafIcon
+                    icon-name="arrow-right"
+                    appearance="solid"
+                    presentation
+                  />
                   <span className="sr-only">Next</span>
-                </button>
+                </SafButton>
 
-                <button
+                <SafButton
+                  a11y-aria-label="Go to last slide (Down arrow or End key)"
+                  shape="circle"
+                  icon-only
                   onClick={handleButtonClick(goToLastSlide)}
                   onKeyDown={handleButtonKeyDown(goToLastSlide)}
-                  aria-label="Go to last slide (Down arrow or End key)"
-                  className="nav-button last-button"
                   title="Last slide (↓ or End)"
                   tabIndex={0}
                 >
-                  <span aria-hidden="true">⇊</span>
+                  <SafIcon
+                    icon-name="forward-fast"
+                    appearance="solid"
+                    presentation
+                  />
                   <span className="sr-only">Last</span>
-                </button>
+                </SafButton>
               </div>
 
               <div className="accessibility-controls">
-                <button
-                  onClick={handleButtonClick(togglePresentationMode)}
-                  onKeyDown={handleButtonKeyDown(togglePresentationMode)}
-                  aria-label={
+                <SafButton
+                  a11y-aria-label={
                     isPresentationMode
                       ? "Exit presentation mode"
                       : "Enter presentation mode (F key)"
                   }
-                  className="control-button presentation-button"
+                  shape="circle"
+                  icon-only
+                  onClick={handleButtonClick(togglePresentationMode)}
+                  onKeyDown={handleButtonKeyDown(togglePresentationMode)}
                   title="Presentation mode (F)"
                   tabIndex={0}
+                  className="control-button presentation-button"
                 >
-                  <span aria-hidden="true">
-                    {isPresentationMode ? "⊡" : "⊞"}
-                  </span>
+                  <SafIcon
+                    icon-name={
+                      isPresentationMode ? "arrows-minimize" : "arrows-maximize"
+                    }
+                    appearance="solid"
+                    presentation
+                  />
                   <span className="sr-only">
                     {isPresentationMode ? "Exit" : "Present"}
                   </span>
-                </button>
+                </SafButton>
 
-                <button
-                  onClick={handleButtonClick(toggleAnimations)}
-                  onKeyDown={handleButtonKeyDown(toggleAnimations)}
-                  aria-label={
+                <SafButton
+                  a11y-aria-label={
                     animationsEnabled
                       ? "Disable animations (A key)"
                       : "Enable animations (A key)"
                   }
-                  className="control-button animation-button"
+                  shape="circle"
+                  icon-only
+                  onClick={handleButtonClick(toggleAnimations)}
+                  onKeyDown={handleButtonKeyDown(toggleAnimations)}
                   title="Toggle animations (A)"
                   tabIndex={0}
+                  className="control-button animation-button"
                 >
-                  <span aria-hidden="true">
-                    {animationsEnabled ? "🎬" : "⏸"}
-                  </span>
+                  <SafIcon
+                    icon-name={animationsEnabled ? "play" : "pause"}
+                    appearance="solid"
+                    presentation
+                  />
                   <span className="sr-only">
                     {animationsEnabled ? "Disable" : "Enable"} animations
                   </span>
-                </button>
+                </SafButton>
               </div>
             </nav>
           </header>
 
-          {showInfo && (
-            <div
-              className="info-panel"
-              role="dialog"
-              aria-labelledby="info-title"
-              aria-modal="false"
-            >
-              <div className="info-content">
-                <h2 id="info-title">Presentation Information</h2>
-                <div className="info-section">
-                  <h3>Navigation</h3>
-                  <ul>
-                    <li>
-                      <kbd>←</kbd> <kbd>→</kbd> Previous/Next slide
-                    </li>
-                    <li>
-                      <kbd>↑</kbd> <kbd>Home</kbd> First slide
-                    </li>
-                    <li>
-                      <kbd>↓</kbd> <kbd>End</kbd> Last slide
-                    </li>
-                    <li>
-                      <kbd>Space</kbd> <kbd>Enter</kbd> Next slide
-                    </li>
-                  </ul>
-                </div>
-                <div className="info-section">
-                  <h3>Controls</h3>
-                  <ul>
-                    <li>
-                      <kbd>F</kbd> Toggle presentation mode
-                    </li>
-                    <li>
-                      <kbd>A</kbd> Toggle animations
-                    </li>
-                    <li>
-                      <kbd>H</kbd> Hear navigation help
-                    </li>
-                    <li>
-                      <kbd>Esc</kbd> Focus current slide
-                    </li>
-                  </ul>
-                </div>
-                <div className="info-section">
-                  <h3>Accessibility Features</h3>
-                  <ul>
-                    <li>Screen reader announcements for slide changes</li>
-                    <li>Keyboard navigation support</li>
-                    <li>Reduced motion respect</li>
-                    <li>High contrast support</li>
-                  </ul>
-                </div>
-                <button
-                  onClick={handleButtonClick(() => setShowInfo(false))}
-                  onKeyDown={handleButtonKeyDown(() => setShowInfo(false))}
-                  className="close-info-button"
-                  aria-label="Close information panel"
-                  tabIndex={0}
+          <SafDialog
+            id="overview"
+            modal={true}
+            hidden={!showInfo}
+            is-alert={false}
+            is-header={true}
+            is-footer={true}
+            no-focus-trap={false}
+            dialog-title="Presentation Information"
+            dialog-subtitle="Keyboard shortcuts and accessibility features"
+            onClose={() => setShowInfo(false)}
+          >
+            <div className="info-content">
+              <div className="info-section">
+                <h3>Navigation</h3>
+                <ul>
+                  <li>
+                    <kbd>←</kbd> <kbd>→</kbd> Previous/Next slide
+                  </li>
+                  <li>
+                    <kbd>↑</kbd> <kbd>Home</kbd> First slide
+                  </li>
+                  <li>
+                    <kbd>↓</kbd> <kbd>End</kbd> Last slide
+                  </li>
+                  <li>
+                    <kbd>Space</kbd> <kbd>Enter</kbd> Next slide
+                  </li>
+                </ul>
+              </div>
+              <div className="info-section">
+                <h3>Controls</h3>
+                <ul>
+                  <li>
+                    <kbd>F</kbd> Toggle presentation mode
+                  </li>
+                  <li>
+                    <kbd>A</kbd> Toggle animations
+                  </li>
+                  <li>
+                    <kbd>H</kbd> Hear navigation help
+                  </li>
+                  <li>
+                    <kbd>Esc</kbd> Focus current slide
+                  </li>
+                </ul>
+              </div>
+              <div className="info-section">
+                <h3>Accessibility Features</h3>
+                <ul>
+                  <li>Screen reader announcements for slide changes</li>
+                  <li>Keyboard navigation support</li>
+                  <li>Reduced motion respect</li>
+                  <li>High contrast support</li>
+                </ul>
+              </div>
+              <div className="info-section">
+                <div
+                  className="sr-only"
+                  role="region"
+                  aria-label="Presentation instructions"
                 >
-                  Close
-                </button>
+                  <h2>Navigation Instructions</h2>
+                  <p>This presentation can be navigated using:</p>
+                  <ul>
+                    <li>
+                      Arrow keys to move between slides (Up/Home for first,
+                      Down/End for last)
+                    </li>
+                    <li>Space bar or Enter to advance to next slide</li>
+                    <li>Tab to navigate interactive elements</li>
+                    <li>H key to hear navigation help</li>
+                    <li>F key for presentation mode</li>
+                    <li>A key to toggle animations</li>
+                    <li>Escape key to focus on current slide</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          )}
-
-          <div
-            className="sr-only"
-            role="region"
-            aria-label="Presentation instructions"
-          >
-            <h2>Navigation Instructions</h2>
-            <p>This presentation can be navigated using:</p>
-            <ul>
-              <li>
-                Arrow keys to move between slides (Up/Home for first, Down/End
-                for last)
-              </li>
-              <li>Space bar or Enter to advance to next slide</li>
-              <li>Tab to navigate interactive elements</li>
-              <li>H key to hear navigation help</li>
-              <li>F key for presentation mode</li>
-              <li>A key to toggle animations</li>
-              <li>Escape key to focus on current slide</li>
-            </ul>
-          </div>
+            <div
+              slot="footer"
+              style={{
+                display: "flex",
+                gap: 12,
+                justifyContent: "flex-end",
+                width: "100%",
+              }}
+            >
+              <SafButton
+                appearance="primary"
+                onClick={handleButtonClick(() => setShowInfo(false))}
+                onKeyDown={handleButtonKeyDown(() => setShowInfo(false))}
+                tabIndex={0}
+              >
+                Close
+              </SafButton>
+            </div>
+          </SafDialog>
         </>
       )}
     </div>

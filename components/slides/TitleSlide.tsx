@@ -2,16 +2,20 @@ export default function TitleSlide() {
   return (
     <section className="title-slide" data-background-color="#FFFFFF">
       <header>
-        <h1>Accessibility Beyond Compliance: A Holistic Outlook</h1>
-        <p className="subtitle">"Humanity has different shapes and edges—and so should our design practices."</p>
+        <h1>“Accessibility Beyond Compliance: A Holistic Lookout”</h1>
       </header>
 
       <main>
         <div className="presenter-info">
-          <p>Thomson Reuters</p>
-          <p>Accessibility & Inclusive Design</p>
+          <p>
+            By Fri Bonilla, Anthony Owide, Jen DeMesquita, Devon West and Phil
+            Springhall
+          </p>
         </div>
       </main>
+      <aside className="notes">
+        This is a presenter note. Only you will see this in the notes window.
+      </aside>
     </section>
-  )
+  );
 }

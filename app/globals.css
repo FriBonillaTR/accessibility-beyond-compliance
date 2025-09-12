@@ -1,14 +1,17 @@
 /* Converted CSS custom properties to regular CSS values to fix webpack loader errors */
+@import "../node_modules/@saffron/core-styles/dist/index.css";
+/* @import "../node_modules/@saffron/core-styles/dist/fa.css"; */
 * {
-  border-color: #e4e4e7;
+  border-color: #e5e5e5;
 }
 
 body {
   background-color: #ffffff;
-  color: #09090b;
+  color: #212223;
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
 }
 
 /* Presentation-specific styles */
@@ -17,6 +20,11 @@ body {
   width: 100% !important;
   height: 100vh !important;
   position: relative;
+}
+
+/* Hide presenter notes in main presentation view */
+.reveal .notes {
+  display: none !important;
 }
 
 .reveal .slides {
@@ -77,21 +85,21 @@ body {
 .reveal h1,
 .reveal h2,
 .reveal h3 {
-  color: #003366;
+  color: #d64000;
   font-weight: 600;
 }
 
 .reveal .progress {
-  color: #ff6200;
+  color: #d64000;
 }
 
 .reveal .controls {
-  color: #0066cc;
+  color: #50665b;
 }
 
 /* Accessibility enhancements */
 .reveal .slides section:focus {
-  outline: 3px solid #ff6200;
+  outline: 3px solid #d64000;
   outline-offset: 2px;
 }
 
@@ -138,7 +146,7 @@ body {
 }
 
 .help-button {
-  background: #0066cc;
+  background: #50665b;
   color: white;
   border: none;
   border-radius: 50%;
@@ -152,12 +160,12 @@ body {
 }
 
 .help-button:hover {
-  background: #003366;
+  background: #123015;
 }
 
 .slide-counter {
   font-weight: 500;
-  color: #003366;
+  color: #123015;
 }
 
 .nav-controls {
@@ -166,7 +174,7 @@ body {
 }
 
 .nav-button {
-  background: #ff6200;
+  background: #d64000;
   color: white;
   border: none;
   border-radius: 0.25rem;
@@ -177,7 +185,7 @@ body {
 }
 
 .nav-button:hover:not(:disabled) {
-  background: #e55a00;
+  background: #d64000;
 }
 
 .nav-button:disabled {
@@ -189,7 +197,7 @@ body {
   position: absolute;
   top: -40px;
   left: 6px;
-  background: #ff6200;
+  background: #d64000;
   color: white;
   padding: 8px;
   text-decoration: none;
@@ -203,25 +211,25 @@ body {
 
 /* Added Thomson Reuters brand styling with regular CSS */
 .tr-title {
-  color: #003366;
+  color: #123015;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
 .tr-subtitle {
-  color: #0066cc;
+  color: #50665b;
   font-size: 1.25rem;
   margin-bottom: 2rem;
 }
 
 .tr-highlight {
-  color: #ff6200;
+  color: #d64000;
   font-weight: 600;
 }
 
 .tr-card {
-  background: #f5f5f5;
+  background: #f2f2f2;
   border: 1px solid #e5e5e5;
   border-radius: 0.5rem;
   padding: 1.5rem;
@@ -240,7 +248,7 @@ body {
 
 .tr-list li:before {
   content: "▶";
-  color: #ff6200;
+  color: #d64000;
   margin-right: 0.5rem;
 }
 
@@ -257,9 +265,16 @@ body {
   width: 3rem;
   height: 3rem;
   border: 3px solid #e5e5e5;
-  border-top: 3px solid #ff6200;
+  border-top: 3px solid #d64000;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.a11y-meets-identity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 @keyframes spin {
@@ -277,7 +292,7 @@ body {
   }
   .loading-spinner {
     animation: none;
-    border-top-color: #003366;
+    border-top-color: #123015;
   }
 }
 
@@ -285,12 +300,12 @@ body {
   .reveal h1,
   .reveal h2,
   .reveal h3 {
-    color: #000000;
+    color: #212223;
   }
 
   .reveal p,
   .reveal li {
-    color: #000000;
+    color: #212223;
   }
 }
 
