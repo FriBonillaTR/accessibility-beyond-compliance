@@ -5,7 +5,7 @@ export default function TitleSlide() {
         <h1>“Accessibility Beyond Compliance: A Holistic Lookout”</h1>
       </header>
 
-      <main>
+      <main className="title-slide">
         <div className="presenter-info">
           <p>
             By Fri Bonilla, Anthony Owide, Jen DeMesquita, Devon West and Phil

@@ -5,7 +5,7 @@ export default function AccessibilityMeetsIdentitySlide5() {
         <h2>Wrapping it all up</h2>
       </header>
 
-      <main>
+      <main className="a11y-meets-identity-slide-5">
         <h3>
           “There is no such thing as a single-issue struggle because we do not
           live single-issue lives.” <br /> --Audre Lorde

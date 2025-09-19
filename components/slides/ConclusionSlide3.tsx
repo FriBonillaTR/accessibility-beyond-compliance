@@ -5,12 +5,12 @@ export default function ConclusionSlide3() {
         <h2>Your role</h2>
       </header>
 
-      <main>
-        <ul>
+      <main className="conclusion-slide-3">
+        <ol>
           <li>Ask who’s being excluded</li>
-          <li>Seek out different perspectives, proactive inclusion</li>
+          <li>Don’t stop learning</li>
           <li>Be wrong and grow</li>
-        </ul>
+        </ol>
       </main>
     </section>
   );

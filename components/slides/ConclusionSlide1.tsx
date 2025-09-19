@@ -5,7 +5,7 @@ export default function ConclusionSlide1() {
         <h2>Accessibility is a Shared Responsibility</h2>
       </header>
 
-      <main>
+      <main className="conclusion-slide-1">
         <ul>
           <li>
             Accessibility is not just a technical requirement, it’s a mindset

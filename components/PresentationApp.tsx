@@ -26,6 +26,29 @@ import ConclusionSlide3 from "./slides/ConclusionSlide3";
 import SafButton from "../lib/core-components-3.10.0/package/dist/esm/components/button/define-react.js";
 import SafDialog from "../lib/core-components-3.10.0/package/dist/esm/components/dialog/define-react.js";
 import SafIcon from "../lib/core-components-3.10.0/package/dist/esm/components/icon/define-react.js";
+import DesignWithIntentionSlide1 from "./slides/DesignWithIntentionSlide1";
+import DesignWithIntentionSlide2 from "./slides/DesignWithIntentionSlide2";
+import DesignWithIntentionSlide3 from "./slides/DesignWithIntentionSlide3";
+import DesignWithIntentionSlide4 from "./slides/DesignWithIntentionSlide4";
+const slideComponents = [
+  TitleSlide,
+  IntroSlide1,
+  IntroSlide2,
+  LimitsOfComplianceSlide,
+  A11yMeetsIdentitySlide1,
+  A11yMeetsIdentitySlide2,
+  A11yMeetsIdentitySlide3,
+  A11yMeetsIdentitySlide4,
+  A11yMeetsIdentitySlide5,
+  A11yMeetsIdentitySlide6,
+  DesignWithIntentionSlide1,
+  DesignWithIntentionSlide2,
+  DesignWithIntentionSlide3,
+  DesignWithIntentionSlide4,
+  ConclusionSlide1,
+  ConclusionSlide2,
+  ConclusionSlide3,
+];
 
 export default function PresentationApp() {
   // Utility handlers for button click and keydown
@@ -60,7 +83,6 @@ export default function PresentationApp() {
   const deckRef = useRef<HTMLDivElement>(null);
   const deckInstanceRef = useRef<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [totalSlides, setTotalSlides] = useState(14); // Update this if slides are added/removed
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,6 +91,7 @@ export default function PresentationApp() {
   const [showInfo, setShowInfo] = useState(false);
   const [keyboardEnabled, setKeyboardEnabled] = useState(false);
   const [speakerNotesOpen, setSpeakerNotesOpen] = useState(false);
+  const [totalSlides] = useState(slideComponents.length);
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -301,20 +324,9 @@ export default function PresentationApp() {
         style={{ display: isLoading || error ? "none" : "block" }}
       >
         <div className="slides" role="main" id="main-content">
-          <TitleSlide />
-          <IntroSlide1 />
-          <IntroSlide2 />
-          <LimitsOfComplianceSlide />
-          <A11yMeetsIdentitySlide1 />
-          <A11yMeetsIdentitySlide2 />
-          <A11yMeetsIdentitySlide3 />
-          <A11yMeetsIdentitySlide4 />
-          <A11yMeetsIdentitySlide5 />
-          <A11yMeetsIdentitySlide6 />
-          <DesigningWithIntentionSlide />
-          <ConclusionSlide1 />
-          <ConclusionSlide2 />
-          <ConclusionSlide3 />
+          {slideComponents.map((Component, index) =>
+            Component ? <Component key={index} /> : null
+          )}
         </div>
       </div>
 

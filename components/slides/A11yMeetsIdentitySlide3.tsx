@@ -5,7 +5,7 @@ export default function AccessibilityMeetsIdentitySlide3() {
         <h2>Venn Diagram</h2>
       </header>
 
-      <main className="a11y-meets-identity">
+      <main className="a11y-meets-identity-slide-3">
         <div className="container">
           <img
             src="/images/venn-diagram-gender-ethnicity-disability.png"
@@ -14,6 +14,10 @@ export default function AccessibilityMeetsIdentitySlide3() {
             data-preview-image="/images/venn-diagram-gender-ethnicity-disability.png"
           />
         </div>
+        <p>
+          Each circle represents an identity. Each overlap represents the unique
+          experience of having those identities together
+        </p>
       </main>
     </section>
   );

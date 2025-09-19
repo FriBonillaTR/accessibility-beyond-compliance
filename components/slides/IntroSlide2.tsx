@@ -54,21 +54,23 @@ export default function IntroSlide2() {
           margin-top: 1rem;
         }
       `}</style>
-      <header className="slide-header">
-        <h2>“Accessibility is not a finish line—it’s a starting point.”</h2>
-      </header>
-      <div className="progress-bar">
-        {steps.map((step, index) => (
-          <div key={index} className="progress-step">
-            <div className="step-number">{index + 1}</div>
-            <div className="step-label">{step}</div>
-          </div>
-        ))}
-      </div>
-      <p className="description">
-        This visualization highlights accessibility as a journey of growth and
-        evolution—not just a checkbox.
-      </p>
+      <main className="intro-slide-2">
+        <header className="slide-header">
+          <h2>“Accessibility is not a finish line—it’s a starting point.”</h2>
+        </header>
+        <div className="progress-bar">
+          {steps.map((step, index) => (
+            <div key={index} className="progress-step">
+              <div className="step-number">{index + 1}</div>
+              <div className="step-label">{step}</div>
+            </div>
+          ))}
+        </div>
+        <p className="description">
+          This visualization highlights accessibility as a journey of growth and
+          evolution—not just a checkbox.
+        </p>
+      </main>
     </section>
   );
 }

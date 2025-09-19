@@ -272,11 +272,26 @@ body {
   animation: spin 1s linear infinite;
 }
 
-.a11y-meets-identity {
+.a11y-meets-identity-slide-3 {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.a11y-meets-identity-slide-3 p {
+  text-align: center !important;
+  font-size: 1.125rem !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
+}
+
+.a11y-meets-identity-slide-4 {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+}
+
+.conclusion-slide-3 {
+  text-align: left;
 }
 
 @keyframes spin {

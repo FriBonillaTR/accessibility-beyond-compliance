@@ -5,7 +5,7 @@ export default function AccessibilityMeetsIdentitySlide6() {
         <h2>Our TR Values</h2>
       </header>
 
-      <main>
+      <main className="a11y-meets-identity-slide-6">
         <div aria-labelledby="intersectional-design">
           <ul className="key-points" role="list">
             <li>Act fast, learn fast</li>

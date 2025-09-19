@@ -5,7 +5,7 @@ export default function AccessibilityMeetsIdentitySlide2() {
         <h2>Brief Definition of Intersectionality</h2>
       </header>
 
-      <main>
+      <main className="a11y-meets-identity-slide-2">
         <div aria-labelledby="intersectional-design">
           <ul className="key-points" role="list">
             <li>
