@@ -1,9 +1,6 @@
 export default function AccessibilityMeetsIdentitySlide2() {
   return (
-    <section
-      className="content-slide section-divider"
-      data-background-color="#1C4E80"
-    >
+    <section className="content-slide section-divider">
       <header className="slide-header">
         <h2>Brief Definition of Intersectionality</h2>
       </header>

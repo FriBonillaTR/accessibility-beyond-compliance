@@ -1,6 +1,6 @@
 export default function ConclusionSlide2() {
   return (
-    <section className="content-slide" data-background-color="#FFFFFF">
+    <section className="content-slide">
       <header className="slide-header">
         <h2>Accessibility and TR values</h2>
       </header>

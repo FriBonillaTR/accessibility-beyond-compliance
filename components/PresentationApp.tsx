@@ -3,6 +3,12 @@
 import type React from "react";
 
 import { useEffect, useRef, useState } from "react";
+import Reveal from "reveal.js";
+import Markdown from "reveal.js/plugin/markdown/markdown.esm.js";
+import Zoom from "reveal.js/plugin/zoom/zoom.esm.js";
+import RevealNotes from "reveal.js/plugin/notes/notes.esm.js";
+import "reveal.js/dist/reveal.css";
+//import "reveal.js/dist/theme/blood.css";
 import TitleSlide from "./slides/TitleSlide";
 import IntroSlide1 from "./slides/IntroSlide1";
 import IntroSlide2 from "./slides/IntroSlide2";
@@ -22,6 +28,35 @@ import SafDialog from "../lib/core-components-3.10.0/package/dist/esm/components
 import SafIcon from "../lib/core-components-3.10.0/package/dist/esm/components/icon/define-react.js";
 
 export default function PresentationApp() {
+  // Utility handlers for button click and keydown
+  const handleButtonClick =
+    (action: () => void) => (event: React.MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      action();
+    };
+
+  const handleButtonKeyDown =
+    (action: () => void) => (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        event.stopPropagation();
+        action();
+      }
+    };
+
+  // Slide navigation helpers
+  const nextSlide = () => {
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.next();
+    }
+  };
+
+  const prevSlide = () => {
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.prev();
+    }
+  };
   const deckRef = useRef<HTMLDivElement>(null);
   const deckInstanceRef = useRef<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -32,6 +67,8 @@ export default function PresentationApp() {
   const [isPresentationMode, setIsPresentationMode] = useState(false);
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
+  const [keyboardEnabled, setKeyboardEnabled] = useState(false);
+  const [speakerNotesOpen, setSpeakerNotesOpen] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -47,10 +84,21 @@ export default function PresentationApp() {
         console.log("[v0] Starting Reveal.js initialization...");
         setIsLoading(true);
 
-        const { default: Reveal } = await import("reveal.js");
-        const RevealNotes = (await import("reveal.js/plugin/notes/notes.js"))
-          .default;
-        console.log("[v0] Reveal.js and Notes plugin imported successfully");
+        // Dynamically import Reveal.js and all required plugins in one section
+        const [
+          { default: Reveal },
+          { default: Markdown },
+          { default: Zoom },
+          { default: RevealNotes },
+        ] = await Promise.all([
+          import("reveal.js"),
+          import("reveal.js/plugin/markdown/markdown.esm.js"),
+          import("reveal.js/plugin/zoom/zoom.esm.js"),
+          import("reveal.js/plugin/notes/notes.esm.js"),
+        ]);
+        console.log(
+          "[v0] Reveal.js, Notes, and Markdown plugins imported successfully"
+        );
 
         console.log("[v0] Checking deckRef.current:", deckRef.current);
 
@@ -67,53 +115,25 @@ export default function PresentationApp() {
 
           const deck = new Reveal(deckRef.current, {
             hash: true,
-            keyboard: {
-              37: "left", // Left arrow
-              39: "right", // Right arrow
-              38: () => {
-                // Up arrow - go to first slide
-                if (deckInstanceRef.current) {
-                  deckInstanceRef.current.slide(0);
-                  announceToScreenReader("Navigated to first slide");
-                }
-              },
-              40: () => {
-                // Down arrow - go to last slide
-                if (deckInstanceRef.current) {
-                  deckInstanceRef.current.slide(totalSlides - 1);
-                  announceToScreenReader("Navigated to last slide");
-                }
-              },
-              36: () => {
-                // Home key - go to first slide
-                if (deckInstanceRef.current) {
-                  deckInstanceRef.current.slide(0);
-                  announceToScreenReader("Navigated to first slide");
-                }
-              },
-              35: () => {
-                // End key - go to last slide
-                if (deckInstanceRef.current) {
-                  deckInstanceRef.current.slide(totalSlides - 1);
-                  announceToScreenReader("Navigated to last slide");
-                }
-              },
-              72: () => announceHelp(), // H key for help
-              27: () => focusCurrentSlide(), // Escape to focus slide
-              70: () => togglePresentationMode(), // F key for fullscreen/presentation mode
-              65: () => toggleAnimations(), // A key to toggle animations
-            },
+            keyboard: keyboardEnabled,
             touch: true,
             loop: false,
-            transition: animationsEnabled ? "slide" : "none",
-            transitionSpeed: animationsEnabled ? "default" : 0,
+            transition: "slide", // none/fade/slide/convex/concave/zoom
+            transitionSpeed: "default",
+            backgroundTransition: "fade", // none/fade/slide/convex/concave/zoom
+            autoAnimate: true,
+            autoAnimateEasing: "ease",
+            autoAnimateDuration: 1.0,
+            autoAnimateUnmatched: true,
             controls: false,
+            controlsTutorial: false,
             progress: true,
+            slideNumber: true,
+            hashOneBasedIndex: true,
             center: true,
             viewDistance: 3,
             mobileViewDistance: 2,
-            theme: null,
-            plugins: [RevealNotes],
+            plugins: [Markdown, Zoom, RevealNotes],
           });
 
           console.log("[v0] Reveal.js deck created, initializing...");
@@ -138,11 +158,12 @@ export default function PresentationApp() {
           });
 
           deck.on("slidechanged", (event) => {
-            console.log("[v0] Slide changed to:", event.indexh);
-            setCurrentSlide(event.indexh);
-            announceToScreenReader(
-              `Slide ${event.indexh + 1} of ${totalSlides}`
-            );
+            // Reveal.js slidechanged event: event.indexh (horizontal), event.indexv (vertical)
+            const e = event as any;
+            const index = typeof e.indexh === "number" ? e.indexh : 0;
+            console.log("[v0] Slide changed to:", index);
+            setCurrentSlide(index);
+            announceToScreenReader(`Slide ${index + 1} of ${totalSlides}`);
           });
         } else {
           console.error("[v0] deckRef.current is still null after timeout");
@@ -157,7 +178,7 @@ export default function PresentationApp() {
 
     const timer = setTimeout(loadReveal, 50);
     return () => clearTimeout(timer);
-  }, [animationsEnabled, totalSlides]);
+  }, [totalSlides]);
 
   const announceToScreenReader = (message: string) => {
     const announcement = document.createElement("div");
@@ -200,19 +221,35 @@ export default function PresentationApp() {
     }
   };
 
-  const toggleAnimations = () => {
-    setAnimationsEnabled(!animationsEnabled);
-    announceToScreenReader(
-      animationsEnabled ? "Animations disabled" : "Animations enabled"
-    );
-
-    // Update Reveal.js configuration
+  const syncReveal = () => {
     if (deckInstanceRef.current) {
-      deckInstanceRef.current.configure({
-        transition: !animationsEnabled ? "slide" : "none",
-        transitionSpeed: !animationsEnabled ? "default" : 0,
-      });
+      console.log("[v0] Syncing Reveal.js with new slide content...");
+      deckInstanceRef.current.sync();
+      deckInstanceRef.current.layout();
     }
+  };
+
+  const toggleAnimations = () => {
+    setAnimationsEnabled((prev) => {
+      const next = !prev;
+      announceToScreenReader(
+        next ? "Animations enabled" : "Animations disabled"
+      );
+      return next;
+    });
+  };
+
+  const toggleSpeakerNotes = () => {
+    if (deckInstanceRef.current) {
+      const notesPlugin = deckInstanceRef.current.getPlugin("notes");
+      if (notesPlugin && typeof notesPlugin.open === "function") {
+        notesPlugin.open();
+      }
+    }
+  };
+
+  const toggleKeyboard = () => {
+    setKeyboardEnabled((prev) => !prev);
   };
 
   const goToSlide = (slideIndex: number) => {
@@ -235,37 +272,21 @@ export default function PresentationApp() {
     }
   };
 
-  const nextSlide = () => {
-    if (deckInstanceRef.current && isInitialized) {
-      deckInstanceRef.current.next();
+  useEffect(() => {
+    if (!isInitialized) return;
+    // Sync Reveal.js layout after initialization or config changes
+    const timer = setTimeout(syncReveal, 100);
+    if (deckInstanceRef.current) {
+      deckInstanceRef.current.configure({ keyboard: keyboardEnabled });
+      deckInstanceRef.current.configure({
+        autoAnimate: animationsEnabled,
+        transition: animationsEnabled ? "slide" : "none",
+        transitionSpeed: animationsEnabled ? "default" : 0,
+        backgroundTransition: animationsEnabled ? "fade" : "none",
+      });
     }
-  };
-
-  const prevSlide = () => {
-    if (deckInstanceRef.current && isInitialized) {
-      deckInstanceRef.current.prev();
-    }
-  };
-
-  const handleButtonClick =
-    (action: () => void) => (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      action();
-    };
-
-  const handleButtonKeyDown =
-    (action: () => void) => (event: React.KeyboardEvent) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        event.stopPropagation();
-        action();
-      }
-    };
-
-  console.log("[v0] Current loading state:", isLoading);
-  console.log("[v0] Current initialized state:", isInitialized);
-
+    return () => clearTimeout(timer);
+  }, [isInitialized, keyboardEnabled, animationsEnabled]);
   return (
     <div
       className={`presentation-container ${
@@ -325,22 +346,60 @@ export default function PresentationApp() {
               role="navigation"
               aria-label="Presentation navigation"
             >
-              <SafButton
-                a11y-aria-label="Info Button"
-                shape="circle"
-                icon-only
-                onClick={handleButtonClick(() => setShowInfo(!showInfo))}
-                onKeyDown={handleButtonKeyDown(() => setShowInfo(!showInfo))}
-                aria-expanded={showInfo}
-                title="Press for presentation info and keyboard shortcuts"
-                tabIndex={0}
-              >
-                <SafIcon
-                  icon-name="plus"
-                  appearance="solid"
-                  presentation
-                ></SafIcon>
-              </SafButton>
+              <div className="nav-controls">
+                <SafButton
+                  a11y-aria-label="Info Button"
+                  shape="circle"
+                  icon-only
+                  onClick={handleButtonClick(() => setShowInfo(!showInfo))}
+                  onKeyDown={handleButtonKeyDown(() => setShowInfo(!showInfo))}
+                  aria-expanded={showInfo}
+                  title="Show presentation information and keyboard shortcuts"
+                  tabIndex={0}
+                >
+                  <SafIcon
+                    icon-name="info"
+                    appearance="solid"
+                    presentation
+                  ></SafIcon>
+                </SafButton>
+                <SafButton
+                  a11y-aria-label="Toggle keyboard navigation"
+                  shape="circle"
+                  icon-only
+                  onClick={handleButtonClick(toggleKeyboard)}
+                  onKeyDown={handleButtonKeyDown(toggleKeyboard)}
+                  aria-expanded={keyboardEnabled}
+                  title={
+                    keyboardEnabled
+                      ? "Disable keyboard navigation for slides"
+                      : "Enable keyboard navigation for slides"
+                  }
+                  tabIndex={0}
+                >
+                  <SafIcon
+                    icon-name="keyboard"
+                    appearance="solid"
+                    presentation
+                  ></SafIcon>
+                </SafButton>
+                <SafButton
+                  a11y-aria-label="Open speaker notes"
+                  shape="circle"
+                  icon-only
+                  onClick={handleButtonClick(toggleSpeakerNotes)}
+                  onKeyDown={handleButtonKeyDown(toggleSpeakerNotes)}
+                  aria-expanded={speakerNotesOpen}
+                  title="Open speaker notes window"
+                  tabIndex={0}
+                >
+                  <SafIcon
+                    icon-name="podium"
+                    appearance="solid"
+                    presentation
+                  ></SafIcon>
+                </SafButton>
+              </div>
 
               <div
                 className="slide-counter"
@@ -353,7 +412,7 @@ export default function PresentationApp() {
 
               <div className="nav-controls">
                 <SafButton
-                  a11y-aria-label="Go to first slide (Up arrow or Home key)"
+                  a11y-aria-label="Go to first slide"
                   shape="circle"
                   icon-only
                   onClick={handleButtonClick(goToFirstSlide)}
@@ -406,7 +465,7 @@ export default function PresentationApp() {
                 </SafButton>
 
                 <SafButton
-                  a11y-aria-label="Go to last slide (Down arrow or End key)"
+                  a11y-aria-label="Go to last slide"
                   shape="circle"
                   icon-only
                   onClick={handleButtonClick(goToLastSlide)}
@@ -497,12 +556,6 @@ export default function PresentationApp() {
                     <kbd>←</kbd> <kbd>→</kbd> Previous/Next slide
                   </li>
                   <li>
-                    <kbd>↑</kbd> <kbd>Home</kbd> First slide
-                  </li>
-                  <li>
-                    <kbd>↓</kbd> <kbd>End</kbd> Last slide
-                  </li>
-                  <li>
                     <kbd>Space</kbd> <kbd>Enter</kbd> Next slide
                   </li>
                 </ul>
@@ -522,15 +575,6 @@ export default function PresentationApp() {
                   <li>
                     <kbd>Esc</kbd> Focus current slide
                   </li>
-                </ul>
-              </div>
-              <div className="info-section">
-                <h3>Accessibility Features</h3>
-                <ul>
-                  <li>Screen reader announcements for slide changes</li>
-                  <li>Keyboard navigation support</li>
-                  <li>Reduced motion respect</li>
-                  <li>High contrast support</li>
                 </ul>
               </div>
               <div className="info-section">

@@ -1,9 +1,6 @@
 export default function LimitsOfComplianceSlide() {
   return (
-    <section
-      className="content-slide section-divider"
-      data-background-color="#0D2C54"
-    >
+    <section className="content-slide section-divider">
       <header className="slide-header">
         <h2>The Limits of Compliance</h2>
         <p className="section-subtitle">

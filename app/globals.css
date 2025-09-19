@@ -31,6 +31,8 @@ body {
   width: 100% !important;
   height: 100% !important;
   position: relative;
+  transform: none !important;
+  inset: 0 !important;
 }
 
 /* Added essential Reveal.js slide visibility and positioning styles */

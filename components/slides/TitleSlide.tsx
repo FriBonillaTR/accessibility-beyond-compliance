@@ -1,6 +1,6 @@
 export default function TitleSlide() {
   return (
-    <section className="title-slide" data-background-color="#FFFFFF">
+    <section className="title-slide" data-transition="slide">
       <header>
         <h1>“Accessibility Beyond Compliance: A Holistic Lookout”</h1>
       </header>

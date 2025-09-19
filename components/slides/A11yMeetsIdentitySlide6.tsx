@@ -1,9 +1,6 @@
 export default function AccessibilityMeetsIdentitySlide6() {
   return (
-    <section
-      className="content-slide section-divider"
-      data-background-color="#1C4E80"
-    >
+    <section className="content-slide section-divider">
       <header className="slide-header">
         <h2>Our TR Values</h2>
       </header>

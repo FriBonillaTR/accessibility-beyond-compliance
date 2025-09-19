@@ -1,9 +1,6 @@
 export default function DesigningWithIntentionSlide() {
   return (
-    <section
-      className="content-slide section-divider"
-      data-background-color="#FF6200"
-    >
+    <section className="content-slide section-divider">
       <header className="slide-header">
         <h2>Designing with Intention</h2>
         <p className="section-subtitle">

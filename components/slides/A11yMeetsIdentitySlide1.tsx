@@ -1,9 +1,6 @@
 export default function AccessibilityMeetsIdentitySlide1() {
   return (
-    <section
-      className="content-slide section-divider"
-      data-background-color="#1C4E80"
-    >
+    <section className="content-slide section-divider">
       <header className="slide-header">
         <h2>Accessibility Meets Identity</h2>
       </header>

@@ -8,7 +8,7 @@ export default function IntroSlide2() {
   ];
 
   return (
-    <section className="content-slide" data-background-color="#FFFFFF">
+    <section className="content-slide">
       <style>{`
         .content-slide {
           padding: 2rem;

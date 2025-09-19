@@ -1,6 +1,6 @@
 export default function ConclusionSlide3() {
   return (
-    <section className="content-slide" data-background-color="#FFFFFF">
+    <section className="content-slide">
       <header className="slide-header">
         <h2>Your role</h2>
       </header>
