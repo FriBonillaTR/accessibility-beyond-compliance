@@ -11,16 +11,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    unoptimized: false,
   },
-  basePath:
-    process.env.NODE_ENV === "production" && process.env.GITHUB_REPOSITORY
-      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}`
-      : "",
-  assetPrefix:
-    process.env.NODE_ENV === "production" && process.env.GITHUB_REPOSITORY
-      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
-      : "",
+  basePath: "/accessibility-beyond-compliance",
+  assetPrefix: "/accessibility-beyond-compliance",
 
   webpack: (config) => {
     config.resolve.fallback = {
