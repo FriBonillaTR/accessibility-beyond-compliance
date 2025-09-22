@@ -340,12 +340,12 @@ export default function PresentationApp() {
         <div className="slides" role="main" id="main-content">
           <div className="slide-header-logos">
             <img
-              src="/images/unconference-logo.png"
+              src="accessibility-beyond-compliance/images/unconference-logo.png"
               alt="Unconference logo"
               className="slide-logo-left"
             />
             <img
-              src="/images/tr-logo.png"
+              src="accessibility-beyond-compliance/images/tr-logo.png"
               alt="Unconference lines"
               className="slide-logo-right"
             />

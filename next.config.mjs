@@ -15,6 +15,7 @@ const nextConfig = {
   },
   basePath: "/accessibility-beyond-compliance",
   assetPrefix: "/accessibility-beyond-compliance",
+  trailingSlash: true,
 
   webpack: (config) => {
     config.resolve.fallback = {
