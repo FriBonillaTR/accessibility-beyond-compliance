@@ -52,10 +52,10 @@ const slideComponents = [
 
 export default function PresentationApp() {
   // Utility handlers for button click and keydown
+
+  // Only use preventDefault/stopPropagation for keyboard, not for click (mobile compatibility)
   const handleButtonClick =
-    (action: () => void) => (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
+    (action: () => void) => (_event: React.MouseEvent) => {
       action();
     };
 
@@ -66,6 +66,12 @@ export default function PresentationApp() {
         event.stopPropagation();
         action();
       }
+    };
+
+  // For touch events, do not call preventDefault/stopPropagation to avoid passive event error
+  const handleButtonTouchStart =
+    (action: () => void) => (_event: React.TouchEvent) => {
+      action();
     };
 
   // Slide navigation helpers
@@ -324,6 +330,18 @@ export default function PresentationApp() {
         style={{ display: isLoading || error ? "none" : "block" }}
       >
         <div className="slides" role="main" id="main-content">
+          <div className="slide-header-logos">
+            <img
+              src="/images/unconference-logo.png"
+              alt="Unconference logo"
+              className="slide-logo-left"
+            />
+            <img
+              src="/images/tr-logo.png"
+              alt="Unconference lines"
+              className="slide-logo-right"
+            />
+          </div>
           {slideComponents.map((Component, index) =>
             Component ? <Component key={index} /> : null
           )}
@@ -358,192 +376,200 @@ export default function PresentationApp() {
               role="navigation"
               aria-label="Presentation navigation"
             >
-              <div className="nav-controls">
-                <SafButton
-                  a11y-aria-label="Info Button"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(() => setShowInfo(!showInfo))}
-                  onKeyDown={handleButtonKeyDown(() => setShowInfo(!showInfo))}
-                  aria-expanded={showInfo}
-                  title="Show presentation information and keyboard shortcuts"
-                  tabIndex={0}
-                >
-                  <SafIcon
-                    icon-name="info"
-                    appearance="solid"
-                    presentation
-                  ></SafIcon>
-                </SafButton>
-                <SafButton
-                  a11y-aria-label="Toggle keyboard navigation"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(toggleKeyboard)}
-                  onKeyDown={handleButtonKeyDown(toggleKeyboard)}
-                  aria-expanded={keyboardEnabled}
-                  title={
-                    keyboardEnabled
-                      ? "Disable keyboard navigation for slides"
-                      : "Enable keyboard navigation for slides"
-                  }
-                  tabIndex={0}
-                >
-                  <SafIcon
-                    icon-name="keyboard"
-                    appearance="solid"
-                    presentation
-                  ></SafIcon>
-                </SafButton>
-                <SafButton
-                  a11y-aria-label="Open speaker notes"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(toggleSpeakerNotes)}
-                  onKeyDown={handleButtonKeyDown(toggleSpeakerNotes)}
-                  aria-expanded={speakerNotesOpen}
-                  title="Open speaker notes window"
-                  tabIndex={0}
-                >
-                  <SafIcon
-                    icon-name="podium"
-                    appearance="solid"
-                    presentation
-                  ></SafIcon>
-                </SafButton>
-              </div>
-
-              <div
-                className="slide-counter"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <span className="sr-only">Currently viewing </span>
-                Slide {currentSlide + 1} of {totalSlides}
-              </div>
-
-              <div className="nav-controls">
-                <SafButton
-                  a11y-aria-label="Go to first slide"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(goToFirstSlide)}
-                  onKeyDown={handleButtonKeyDown(goToFirstSlide)}
-                  title="First slide (↑ or Home)"
-                  tabIndex={0}
-                >
-                  <SafIcon
-                    icon-name="backward-fast"
-                    appearance="solid"
-                    presentation
-                  />
-                  <span className="sr-only">First</span>
-                </SafButton>
-
-                <SafButton
-                  a11y-aria-label="Go to previous slide (Left arrow key)"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(prevSlide)}
-                  onKeyDown={handleButtonKeyDown(prevSlide)}
-                  title="Previous slide (←)"
-                  tabIndex={0}
-                  disabled={currentSlide === 0}
-                >
-                  <SafIcon
-                    icon-name="arrow-left"
-                    appearance="solid"
-                    presentation
-                  />
-                  <span className="sr-only">Previous</span>
-                </SafButton>
-
-                <SafButton
-                  a11y-aria-label="Go to next slide (Right arrow, Space, or Enter key)"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(nextSlide)}
-                  onKeyDown={handleButtonKeyDown(nextSlide)}
-                  title="Next slide (→, Space, or Enter)"
-                  tabIndex={0}
-                  disabled={currentSlide === totalSlides - 1}
-                >
-                  <SafIcon
-                    icon-name="arrow-right"
-                    appearance="solid"
-                    presentation
-                  />
-                  <span className="sr-only">Next</span>
-                </SafButton>
-
-                <SafButton
-                  a11y-aria-label="Go to last slide"
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(goToLastSlide)}
-                  onKeyDown={handleButtonKeyDown(goToLastSlide)}
-                  title="Last slide (↓ or End)"
-                  tabIndex={0}
-                >
-                  <SafIcon
-                    icon-name="forward-fast"
-                    appearance="solid"
-                    presentation
-                  />
-                  <span className="sr-only">Last</span>
-                </SafButton>
-              </div>
-
-              <div className="accessibility-controls">
-                <SafButton
-                  a11y-aria-label={
-                    isPresentationMode
-                      ? "Exit presentation mode"
-                      : "Enter presentation mode (F key)"
-                  }
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(togglePresentationMode)}
-                  onKeyDown={handleButtonKeyDown(togglePresentationMode)}
-                  title="Presentation mode (F)"
-                  tabIndex={0}
-                  className="control-button presentation-button"
-                >
-                  <SafIcon
-                    icon-name={
-                      isPresentationMode ? "arrows-minimize" : "arrows-maximize"
+              <div className="controls-plus-slide-count">
+                <div className="nav-controls">
+                  <SafButton
+                    a11y-aria-label="Info Button"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(() => setShowInfo(!showInfo))}
+                    onKeyDown={handleButtonKeyDown(() =>
+                      setShowInfo(!showInfo)
+                    )}
+                    aria-expanded={showInfo}
+                    title="Show presentation information and keyboard shortcuts"
+                    tabIndex={0}
+                  >
+                    <SafIcon
+                      icon-name="info"
+                      appearance="solid"
+                      presentation
+                    ></SafIcon>
+                  </SafButton>
+                  <SafButton
+                    a11y-aria-label="Toggle keyboard navigation"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(toggleKeyboard)}
+                    onKeyDown={handleButtonKeyDown(toggleKeyboard)}
+                    aria-expanded={keyboardEnabled}
+                    title={
+                      keyboardEnabled
+                        ? "Disable keyboard navigation for slides"
+                        : "Enable keyboard navigation for slides"
                     }
-                    appearance="solid"
-                    presentation
-                  />
-                  <span className="sr-only">
-                    {isPresentationMode ? "Exit" : "Present"}
-                  </span>
-                </SafButton>
+                    tabIndex={0}
+                  >
+                    <SafIcon
+                      icon-name="keyboard"
+                      appearance="solid"
+                      presentation
+                    ></SafIcon>
+                  </SafButton>
+                  <SafButton
+                    a11y-aria-label="Open speaker notes"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(toggleSpeakerNotes)}
+                    onKeyDown={handleButtonKeyDown(toggleSpeakerNotes)}
+                    aria-expanded={speakerNotesOpen}
+                    title="Open speaker notes window"
+                    tabIndex={0}
+                  >
+                    <SafIcon
+                      icon-name="podium"
+                      appearance="solid"
+                      presentation
+                    ></SafIcon>
+                  </SafButton>
+                </div>
 
-                <SafButton
-                  a11y-aria-label={
-                    animationsEnabled
-                      ? "Disable animations (A key)"
-                      : "Enable animations (A key)"
-                  }
-                  shape="circle"
-                  icon-only
-                  onClick={handleButtonClick(toggleAnimations)}
-                  onKeyDown={handleButtonKeyDown(toggleAnimations)}
-                  title="Toggle animations (A)"
-                  tabIndex={0}
-                  className="control-button animation-button"
+                <div
+                  className="slide-counter"
+                  aria-live="polite"
+                  aria-atomic="true"
                 >
-                  <SafIcon
-                    icon-name={animationsEnabled ? "play" : "pause"}
-                    appearance="solid"
-                    presentation
-                  />
-                  <span className="sr-only">
-                    {animationsEnabled ? "Disable" : "Enable"} animations
-                  </span>
-                </SafButton>
+                  <span className="sr-only">Currently viewing </span>
+                  Slide {currentSlide + 1} of {totalSlides}
+                </div>
+              </div>
+
+              <div className="controls-plus-a11y">
+                <div className="nav-controls">
+                  <SafButton
+                    a11y-aria-label="Go to first slide"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(goToFirstSlide)}
+                    onKeyDown={handleButtonKeyDown(goToFirstSlide)}
+                    title="First slide (↑ or Home)"
+                    tabIndex={0}
+                  >
+                    <SafIcon
+                      icon-name="backward-fast"
+                      appearance="solid"
+                      presentation
+                    />
+                    <span className="sr-only">First</span>
+                  </SafButton>
+
+                  <SafButton
+                    a11y-aria-label="Go to previous slide (Left arrow key)"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(prevSlide)}
+                    onKeyDown={handleButtonKeyDown(prevSlide)}
+                    title="Previous slide (←)"
+                    tabIndex={0}
+                    disabled={currentSlide === 0}
+                  >
+                    <SafIcon
+                      icon-name="arrow-left"
+                      appearance="solid"
+                      presentation
+                    />
+                    <span className="sr-only">Previous</span>
+                  </SafButton>
+
+                  <SafButton
+                    a11y-aria-label="Go to next slide (Right arrow, Space, or Enter key)"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(nextSlide)}
+                    onKeyDown={handleButtonKeyDown(nextSlide)}
+                    title="Next slide (→, Space, or Enter)"
+                    tabIndex={0}
+                    disabled={currentSlide === totalSlides - 1}
+                  >
+                    <SafIcon
+                      icon-name="arrow-right"
+                      appearance="solid"
+                      presentation
+                    />
+                    <span className="sr-only">Next</span>
+                  </SafButton>
+
+                  <SafButton
+                    a11y-aria-label="Go to last slide"
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(goToLastSlide)}
+                    onKeyDown={handleButtonKeyDown(goToLastSlide)}
+                    title="Last slide (↓ or End)"
+                    tabIndex={0}
+                  >
+                    <SafIcon
+                      icon-name="forward-fast"
+                      appearance="solid"
+                      presentation
+                    />
+                    <span className="sr-only">Last</span>
+                  </SafButton>
+                </div>
+
+                <div className="accessibility-controls">
+                  <SafButton
+                    a11y-aria-label={
+                      isPresentationMode
+                        ? "Exit presentation mode"
+                        : "Enter presentation mode (F key)"
+                    }
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(togglePresentationMode)}
+                    onKeyDown={handleButtonKeyDown(togglePresentationMode)}
+                    title="Presentation mode (F)"
+                    tabIndex={0}
+                    className="control-button presentation-button"
+                  >
+                    <SafIcon
+                      icon-name={
+                        isPresentationMode
+                          ? "arrows-minimize"
+                          : "arrows-maximize"
+                      }
+                      appearance="solid"
+                      presentation
+                    />
+                    <span className="sr-only">
+                      {isPresentationMode ? "Exit" : "Present"}
+                    </span>
+                  </SafButton>
+
+                  <SafButton
+                    a11y-aria-label={
+                      animationsEnabled
+                        ? "Disable animations (A key)"
+                        : "Enable animations (A key)"
+                    }
+                    shape="circle"
+                    icon-only
+                    onClick={handleButtonClick(toggleAnimations)}
+                    onKeyDown={handleButtonKeyDown(toggleAnimations)}
+                    title="Toggle animations (A)"
+                    tabIndex={0}
+                    className="control-button animation-button"
+                  >
+                    <SafIcon
+                      icon-name={animationsEnabled ? "play" : "pause"}
+                      appearance="solid"
+                      presentation
+                    />
+                    <span className="sr-only">
+                      {animationsEnabled ? "Disable" : "Enable"} animations
+                    </span>
+                  </SafButton>
+                </div>
               </div>
             </nav>
           </header>

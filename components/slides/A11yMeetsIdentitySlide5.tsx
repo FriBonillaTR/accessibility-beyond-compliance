@@ -6,10 +6,14 @@ export default function AccessibilityMeetsIdentitySlide5() {
       </header>
 
       <main className="a11y-meets-identity-slide-5">
-        <h3>
-          “There is no such thing as a single-issue struggle because we do not
-          live single-issue lives.” <br /> --Audre Lorde
-        </h3>
+        <div className="quote-block">
+          <p className="quote-text">
+            “There is no such thing as a single-issue struggle because we do not
+            live single-issue lives.”
+          </p>
+          <p className="quote-attribution">— Audre Lorde</p>
+        </div>
+
         <div aria-labelledby="intersectional-design">
           <ul className="key-points" role="list">
             <li>Acknowledge that our assumptions will not include everyone</li>

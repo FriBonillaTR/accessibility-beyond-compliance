@@ -1,3 +1,58 @@
+/* Slide header logos: always at the top of main content, left and right, not overlapping header */
+.slide-header-logos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.slide-logo-left {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: auto;
+}
+.slide-logo-right {
+  position: absolute;
+  bottom: 5%;
+  right: 0;
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: auto;
+}
+.reveal .slides {
+  position: relative;
+  /* Ensure space for logos at the top */
+  padding-top: 56px !important;
+}
+.quote-block {
+  background-color: #f5f7fa;
+  border-left: 6px solid #0078d4; /* Use your brand color */
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  font-family: "Segoe UI", sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.quote-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.quote-attribution {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
 /* Converted CSS custom properties to regular CSS values to fix webpack loader errors */
 @import "../lib/core-styles-3.6.0/package/dist/index.css";
 /* @import "../node_modules/@saffron/core-styles/dist/fa.css"; */
@@ -65,7 +120,7 @@ body {
 }
 
 /* Ensure slide content is properly aligned */
-.reveal .slides section h1,
+/* .reveal .slides section h1,
 .reveal .slides section h2,
 .reveal .slides section h3 {
   text-align: center;
@@ -78,12 +133,11 @@ body {
   text-align: left;
   max-width: 800px;
   margin: 0 auto 1rem auto;
-}
-
+} */
 .reveal .slides section ul {
   padding-left: 1.5rem;
+  text-align: left;
 }
-
 .reveal h1,
 .reveal h2,
 .reveal h3 {
@@ -173,6 +227,16 @@ body {
 .nav-controls {
   display: flex;
   gap: 0.5rem;
+}
+.controls-plus-slide-count {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.controls-plus-a11y {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .nav-button {
@@ -329,10 +393,26 @@ body {
 @media (max-width: 768px) {
   .presentation-nav {
     padding: 0.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 
   .reveal .slides section {
     padding: 1rem;
+  }
+
+  .controls-plus-slide-count {
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .controls-plus-a11y {
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .tr-title {

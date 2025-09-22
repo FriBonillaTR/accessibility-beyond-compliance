@@ -71,6 +71,20 @@ export default function IntroSlide2() {
           evolution—not just a checkbox.
         </p>
       </main>
+      <aside className="notes">
+        Accessibility gives us a solid foundation—but it’s not the finish line.
+        It helps us build with structure, consistency, and a shared language.
+        It’s where many teams begin, and rightly so. But if we stop there, we
+        risk designing for standards instead of for people. The next steps
+        aren’t fixed. They emerge from how well we meet people where they
+        are—across needs, contexts, and edge cases. That’s where the real work
+        begins: not just checking boxes, but asking deeper questions. “Does this
+        actually work for the multiple persons using it?” This question invites
+        us to shift our mindset—from compliance to care, from rules to
+        relationships. It’s not about abandoning standards, but about
+        recognizing their limits. As we move forward, we’ll explore what happens
+        when we rely solely on guidelines—and why that might not be enough.
+      </aside>
     </section>
   );
 }
