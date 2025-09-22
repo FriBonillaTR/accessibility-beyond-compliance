@@ -28,7 +28,7 @@ export default function TitleSlide() {
             }}
           >
             <img
-              src="/placeholder-user.jpg"
+              src="/accessibility-beyond-compliance/placeholder-user.jpg"
               alt="Fri Bonilla"
               style={{
                 width: 80,
@@ -48,7 +48,7 @@ export default function TitleSlide() {
             }}
           >
             <img
-              src="/placeholder-user.jpg"
+              src="/accessibility-beyond-compliance/placeholder-user.jpg"
               alt="Anthony Owide"
               style={{
                 width: 80,
@@ -68,7 +68,7 @@ export default function TitleSlide() {
             }}
           >
             <img
-              src="/placeholder-user.jpg"
+              src="/accessibility-beyond-compliance/placeholder-user.jpg"
               alt="Jen DeMesquita"
               style={{
                 width: 80,
@@ -90,7 +90,7 @@ export default function TitleSlide() {
             }}
           >
             <img
-              src="/placeholder-user.jpg"
+              src="/accessibility-beyond-compliance/placeholder-user.jpg"
               alt="Devon West"
               style={{
                 width: 80,
@@ -110,7 +110,7 @@ export default function TitleSlide() {
             }}
           >
             <img
-              src="/placeholder-user.jpg"
+              src="/accessibility-beyond-compliance/placeholder-user.jpg"
               alt="Phil Springhall"
               style={{
                 width: 80,

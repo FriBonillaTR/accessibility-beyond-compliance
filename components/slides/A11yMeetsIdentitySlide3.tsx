@@ -8,7 +8,7 @@ export default function AccessibilityMeetsIdentitySlide3() {
       <main className="a11y-meets-identity-slide-3">
         <div className="container">
           <img
-            src="/images/venn-diagram-gender-ethnicity-disability.png"
+            src="/accessibility-beyond-compliance/images/venn-diagram-gender-ethnicity-disability.png"
             alt="Venn diagram showing the overlap between gender, ethnicity, and disability"
             className="max-w-full max-h-96 object-contain rounded-lg shadow-lg cursor-pointer"
             data-preview-image="/images/venn-diagram-gender-ethnicity-disability.png"
