@@ -68,24 +68,9 @@ export default function PresentationApp() {
       }
     };
 
-  // For touch events, do not call preventDefault/stopPropagation to avoid passive event error
-  const handleButtonTouchStart =
-    (action: () => void) => (_event: React.TouchEvent) => {
-      action();
-    };
+  // ...existing code...
 
-  // Slide navigation helpers
-  const nextSlide = () => {
-    if (deckInstanceRef.current && isInitialized) {
-      deckInstanceRef.current.next();
-    }
-  };
-
-  const prevSlide = () => {
-    if (deckInstanceRef.current && isInitialized) {
-      deckInstanceRef.current.prev();
-    }
-  };
+  // React refs and state declarations
   const deckRef = useRef<HTMLDivElement>(null);
   const deckInstanceRef = useRef<any>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -98,6 +83,29 @@ export default function PresentationApp() {
   const [keyboardEnabled, setKeyboardEnabled] = useState(false);
   const [speakerNotesOpen, setSpeakerNotesOpen] = useState(false);
   const [totalSlides] = useState(slideComponents.length);
+
+  // Slide navigation helpers
+  const nextSlide = () => {
+    console.log("nextSlide called", {
+      deck: deckInstanceRef.current,
+      isInitialized,
+    });
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.next();
+      deckInstanceRef.current.layout();
+    }
+  };
+
+  const prevSlide = () => {
+    console.log("prevSlide called", {
+      deck: deckInstanceRef.current,
+      isInitialized,
+    });
+    if (deckInstanceRef.current && isInitialized) {
+      deckInstanceRef.current.prev();
+      deckInstanceRef.current.layout();
+    }
+  };
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -161,7 +169,7 @@ export default function PresentationApp() {
             hashOneBasedIndex: true,
             center: true,
             viewDistance: 3,
-            mobileViewDistance: 2,
+            mobileViewDistance: 1,
             plugins: [Markdown, Zoom, RevealNotes],
           });
 

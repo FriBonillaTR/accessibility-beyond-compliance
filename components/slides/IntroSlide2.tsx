@@ -1,11 +1,5 @@
 export default function IntroSlide2() {
-  const steps = [
-    "Compliance - Meets standards",
-    "Usability - Works well for real users",
-    "Adaptability - Responds to diverse contexts",
-    "Empathy - Considers lived experience",
-    "Inclusion - Welcomes everyone by design",
-  ];
+  const steps = ["Accessibility", "?", "?", "?", "?"];
 
   return (
     <section className="content-slide">
@@ -82,8 +76,22 @@ export default function IntroSlide2() {
         actually work for the multiple persons using it?” This question invites
         us to shift our mindset—from compliance to care, from rules to
         relationships. It’s not about abandoning standards, but about
-        recognizing their limits. As we move forward, we’ll explore what happens
-        when we rely solely on guidelines—and why that might not be enough.
+        recognizing their limits. Let’s consider a scenario: An elderly
+        user—perhaps a retired judge or senior legal consultant—is trying to
+        access one of our platforms. The interface meets all accessibility
+        standards, but the font is small, the navigation is dense, and the usage
+        is overly technical. Technically, it’s accessible. Practically, it’s
+        frustrating. Now imagine this same user also speaks English as a second
+        language. The experience becomes even more challenging—not because of a
+        lack of effort, but because the design didn’t account for the full
+        context of the user. Accessibility isn’t just about disability. It’s
+        about designing for the full range of human experience. Our users bring
+        with them layers of identity: age, language, gender, neurodiversity,
+        cultural background—and these layers shape how they interact with our
+        products. When we treat accessibility as a mindset, we begin to design
+        with empathy—not just for compliance, but for care. And that mindset
+        helps us build tools that are not only usable, but empowering. This
+        brings us to our first idea: The Limits of Compliance.
       </aside>
     </section>
   );
