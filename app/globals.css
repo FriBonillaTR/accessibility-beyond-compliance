@@ -1,72 +1,3 @@
-@keyframes fadeInCard {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.fade-in-on-slide {
-  opacity: 0;
-  animation: fadeInCard 1s ease forwards;
-}
-/* Slide header logos: always at the top of main content, left and right, not overlapping header */
-.slide-header-logos {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-.slide-logo-left {
-  position: absolute;
-  top: 12%;
-  left: 0;
-  height: 100px;
-  width: auto;
-  object-fit: contain;
-  pointer-events: auto;
-}
-.slide-logo-right {
-  position: absolute;
-  bottom: 5%;
-  right: 0;
-  height: 70px;
-  width: auto;
-  object-fit: contain;
-  pointer-events: auto;
-}
-.reveal .slides {
-  position: relative;
-  /* Ensure space for logos at the top */
-  padding-top: 56px !important;
-}
-.quote-block {
-  background-color: #f5f7fa;
-  border-left: 6px solid #0078d4; /* Use your brand color */
-  padding: 1.5rem 2rem;
-  margin: 2rem 0;
-  font-family: "Segoe UI", sans-serif;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  text-align: center;
-}
-
-.quote-text {
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #333;
-  margin: 0 0 0.5rem 0;
-}
-
-.quote-attribution {
-  font-size: 1rem;
-  color: #666;
-  margin: 0;
-}
 /* Converted CSS custom properties to regular CSS values to fix webpack loader errors */
 @import "../lib/core-styles-3.6.0/package/dist/index.css";
 /* @import "../node_modules/@saffron/core-styles/dist/fa.css"; */
@@ -140,14 +71,14 @@ body {
   text-align: center;
   width: 100%;
   margin: 0 auto 1.5rem auto;
-}
-
+} */
 .reveal .slides section p,
 .reveal .slides section ul {
-  text-align: left;
   max-width: 800px;
   margin: 0 auto 1rem auto;
-} */
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
 .reveal .slides section ul {
   padding-left: 1.5rem;
   text-align: left;
@@ -370,6 +301,129 @@ body {
 
 .conclusion-slide-3 {
   text-align: left;
+}
+
+.timeline-slide .timeline-graphic {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 2rem 0;
+}
+.timeline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+.timeline-item {
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 2rem;
+}
+.timeline-item:last-child .timeline-line {
+  display: block;
+  height: 2rem; /* or 100% if you want it to reach the bottom */
+  background: #0078d4;
+  opacity: 0.3; /* faded for end */
+}
+.timeline-dot {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  background: #0078d4;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  z-index: 2;
+}
+.timeline-line {
+  position: absolute;
+  left: 1.2rem;
+  top: 1.5rem;
+  width: 0.25rem;
+  height: calc(100% - 1.5rem);
+  background: #0078d4;
+  z-index: 1;
+}
+.timeline-content {
+  background: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.timeline-title {
+  margin: 0 0 0.5rem 0;
+}
+
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-in-on-slide {
+  opacity: 0;
+  animation: fadeInCard 1s ease forwards;
+}
+/* Slide header logos: always at the top of main content, left and right, not overlapping header */
+.slide-header-logos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.slide-logo-left {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: auto;
+}
+.slide-logo-right {
+  position: absolute;
+  bottom: 5%;
+  right: 0;
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: auto;
+}
+.reveal .slides {
+  position: relative;
+  /* Ensure space for logos at the top */
+  padding-top: 56px !important;
+}
+.quote-block {
+  background-color: #f5f7fa;
+  border-left: 6px solid #0078d4; /* Use your brand color */
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  font-family: "Segoe UI", sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.quote-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.quote-attribution {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
 }
 
 @keyframes spin {

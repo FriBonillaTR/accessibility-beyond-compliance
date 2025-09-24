@@ -3,23 +3,17 @@
 import type React from "react";
 
 import { useEffect, useRef, useState } from "react";
-import Reveal from "reveal.js";
-import Markdown from "reveal.js/plugin/markdown/markdown.esm.js";
-import Zoom from "reveal.js/plugin/zoom/zoom.esm.js";
-import RevealNotes from "reveal.js/plugin/notes/notes.esm.js";
 import "reveal.js/dist/reveal.css";
 //import "reveal.js/dist/theme/blood.css";
 import TitleSlide from "./slides/TitleSlide";
 import IntroSlide1 from "./slides/IntroSlide1";
 import IntroSlide2 from "./slides/IntroSlide2";
-import LimitsOfComplianceSlide from "./slides/LimitsOfComplianceSlide";
 import A11yMeetsIdentitySlide1 from "./slides/A11yMeetsIdentitySlide1";
 import A11yMeetsIdentitySlide2 from "./slides/A11yMeetsIdentitySlide2";
 import A11yMeetsIdentitySlide3 from "./slides/A11yMeetsIdentitySlide3";
 import A11yMeetsIdentitySlide4 from "./slides/A11yMeetsIdentitySlide4";
 import A11yMeetsIdentitySlide5 from "./slides/A11yMeetsIdentitySlide5";
 import A11yMeetsIdentitySlide6 from "./slides/A11yMeetsIdentitySlide6";
-import DesigningWithIntentionSlide from "./slides/DesigningWithIntentionSlide";
 import ConclusionSlide1 from "./slides/ConclusionSlide1";
 import ConclusionSlide2 from "./slides/ConclusionSlide2";
 import ConclusionSlide3 from "./slides/ConclusionSlide3";
@@ -30,11 +24,28 @@ import DesignWithIntentionSlide1 from "./slides/DesignWithIntentionSlide1";
 import DesignWithIntentionSlide2 from "./slides/DesignWithIntentionSlide2";
 import DesignWithIntentionSlide3 from "./slides/DesignWithIntentionSlide3";
 import DesignWithIntentionSlide4 from "./slides/DesignWithIntentionSlide4";
+import LimitsOfComplianceSlide1 from "./slides/LimitsOfComplianceSlide1";
+import LimitsOfComplianceSlide2 from "./slides/LimitsOfComplianceSlide2";
+import LimitsOfComplianceSlide3 from "./slides/LimitsOfComplianceSlide3";
+import LimitsOfComplianceSlide4 from "./slides/LimitsOfComplianceSlide4";
+import LimitsOfComplianceSlide5 from "./slides/LimitsOfComplianceSlide5";
+import LimitsOfComplianceSlide6 from "./slides/LimitsOfComplianceSlide6";
+import LimitsOfComplianceSlide7 from "./slides/LimitsOfComplianceSlide7";
+import LimitsOfComplianceSlide8 from "./slides/LimitsOfComplianceSlide8";
+import LimitsOfComplianceSlide9 from "./slides/LimitsOfComplianceSlide9";
 const slideComponents = [
   TitleSlide,
   IntroSlide1,
   IntroSlide2,
-  LimitsOfComplianceSlide,
+  LimitsOfComplianceSlide1,
+  LimitsOfComplianceSlide2,
+  LimitsOfComplianceSlide3,
+  LimitsOfComplianceSlide4,
+  LimitsOfComplianceSlide5,
+  LimitsOfComplianceSlide6,
+  LimitsOfComplianceSlide7,
+  LimitsOfComplianceSlide8,
+  LimitsOfComplianceSlide9,
   A11yMeetsIdentitySlide1,
   A11yMeetsIdentitySlide2,
   A11yMeetsIdentitySlide3,
@@ -80,7 +91,7 @@ export default function PresentationApp() {
   const [isPresentationMode, setIsPresentationMode] = useState(false);
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
-  const [keyboardEnabled, setKeyboardEnabled] = useState(false);
+  const [keyboardEnabled, setKeyboardEnabled] = useState(true);
   const [speakerNotesOpen, setSpeakerNotesOpen] = useState(false);
   const [totalSlides] = useState(slideComponents.length);
 
@@ -330,52 +341,7 @@ export default function PresentationApp() {
         isPresentationMode ? "presentation-mode" : ""
       }`}
     >
-      <div
-        className="reveal"
-        ref={deckRef}
-        role="application"
-        aria-label="Accessibility Beyond Compliance Presentation"
-        style={{ display: isLoading || error ? "none" : "block" }}
-      >
-        <div className="slides" role="main" id="main-content">
-          <div className="slide-header-logos">
-            <img
-              src="/accessibility-beyond-compliance/images/unconference-logo.png"
-              alt="Unconference logo"
-              className="slide-logo-left"
-            />
-            <img
-              src="/accessibility-beyond-compliance/images/tr-logo.png"
-              alt="Unconference lines"
-              className="slide-logo-right"
-            />
-          </div>
-          {slideComponents.map((Component, index) =>
-            Component ? <Component key={index} /> : null
-          )}
-        </div>
-      </div>
-
-      {isLoading && (
-        <div className="presentation-loading">
-          <div
-            className="loading-spinner"
-            role="status"
-            aria-label="Initializing presentation"
-          >
-            <span className="sr-only">Initializing presentation...</span>
-          </div>
-        </div>
-      )}
-
-      {error && (
-        <div className="presentation-error">
-          <h1>Error Loading Presentation</h1>
-          <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
-        </div>
-      )}
-
+      {/* Move header first in DOM for accessibility. Use CSS to keep it visually at the top if needed. */}
       {!isLoading && !error && (
         <>
           <header className="presentation-header" role="banner">
@@ -666,6 +632,52 @@ export default function PresentationApp() {
             </div>
           </SafDialog>
         </>
+      )}
+
+      <div
+        className="reveal"
+        ref={deckRef}
+        role="region"
+        aria-label="Accessibility Beyond Compliance Presentation"
+        style={{ display: isLoading || error ? "none" : "block" }}
+      >
+        <div className="slides" role="main" id="main-content" tabIndex={0}>
+          <div className="slide-header-logos">
+            <img
+              src="/accessibility-beyond-compliance/images/unconference-logo.png"
+              alt="Unconference logo"
+              className="slide-logo-left"
+            />
+            <img
+              src="/accessibility-beyond-compliance/images/tr-logo.png"
+              alt="Unconference lines"
+              className="slide-logo-right"
+            />
+          </div>
+          {slideComponents.map((Component, index) =>
+            Component ? <Component key={index} /> : null
+          )}
+        </div>
+      </div>
+
+      {isLoading && (
+        <div className="presentation-loading">
+          <div
+            className="loading-spinner"
+            role="status"
+            aria-label="Initializing presentation"
+          >
+            <span className="sr-only">Initializing presentation...</span>
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="presentation-error">
+          <h1>Error Loading Presentation</h1>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Retry</button>
+        </div>
       )}
     </div>
   );
